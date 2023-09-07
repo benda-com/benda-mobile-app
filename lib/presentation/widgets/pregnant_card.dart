@@ -1,5 +1,5 @@
 import 'package:benda/utils.dart';
-import 'package:benda/presentation/screen/genyco/pregnant_details.dart';
+import 'package:benda/presentation/screen/genyco/params/pregnant_params_layout.dart';
 import 'package:flutter/material.dart';
 
 class PregnantCard extends StatelessWidget {
@@ -33,27 +33,26 @@ class PregnantCard extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (BuildContext context) {
-              return const PregnantDetails();
-            },
-          ));
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (BuildContext context) {
+            return const PregnantDetails();
+          }));
         },
         child: ListTile(
           contentPadding: EdgeInsets.all(10),
           tileColor: Colors.white,
           leading: CircleAvatar(
-            foregroundImage: AssetImage("images/ellipse-1-bg-F5q.png"),
+            foregroundImage: AssetImage("images/${womenimage}"),
           ),
           title: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Viviane",
+                name,
                 style: safeGoogleFont(
                   'Inter',
-                  fontSize: 20 * ffem,
+                  fontSize: 14 * ffem,
                   fontWeight: FontWeight.w400,
                   height: 1.2125 * ffem / fem,
                   color: Color(0xff333333),
@@ -64,10 +63,10 @@ class PregnantCard extends StatelessWidget {
               ),
               Text(
                 // semainesTTM (149:189)
-                '24 semaines',
+                '${week} semaines',
                 style: safeGoogleFont(
                   'Inter',
-                  fontSize: 16 * ffem,
+                  fontSize: 13 * ffem,
                   fontWeight: FontWeight.w400,
                   height: 1.2125 * ffem / fem,
                   color: Color(0xff5c5a5a),
@@ -78,10 +77,10 @@ class PregnantCard extends StatelessWidget {
               ),
               Text(
                 // ansP67 (149:190)
-                '24 ans',
+                '${age} ans',
                 style: safeGoogleFont(
                   'Inter',
-                  fontSize: 15 * ffem,
+                  fontSize: 13 * ffem,
                   fontWeight: FontWeight.w400,
                   height: 1.2125 * ffem / fem,
                   color: Color(0xffb1aeae),
@@ -96,13 +95,13 @@ class PregnantCard extends StatelessWidget {
                 // normal4i3 (149:193)
                 margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 5 * fem, 0 * fem),
                 child: Text(
-                  "Normal",
+                  status,
                   style: safeGoogleFont(
                     'Inter',
-                    fontSize: 14 * ffem,
+                    fontSize: 12 * ffem,
                     fontWeight: FontWeight.w400,
                     height: 1.2125 * ffem / fem,
-                    color: Color(0xff08d635),
+                    color: colorstatus,
                   ),
                 ),
               ),
@@ -112,7 +111,7 @@ class PregnantCard extends StatelessWidget {
                 height: 8 * fem,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4 * fem),
-                  color: Color(0xff08d635),
+                  color: colorstatus,
                 ),
               ),
             ],

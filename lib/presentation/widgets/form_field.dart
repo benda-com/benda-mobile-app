@@ -9,20 +9,21 @@ class TextFieldWidget extends StatelessWidget {
     required this.ffem,
     required this.fieldName,
     required this.placeholder,
+    this.defaultValue,
   });
 
   final double fem;
   final double ffem;
   final String fieldName;
   final String placeholder;
+  final String? defaultValue;
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          // adresseemailvwR (289:522)
-          margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 205 * fem, 10 * fem),
           child: Text(
             fieldName,
             style: safeGoogleFont(
@@ -36,17 +37,35 @@ class TextFieldWidget extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 50,
-          child: TextFormField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(width: 3, color: Color(0xffaeaeae)),
-                  borderRadius: BorderRadius.circular(8)),
-              hintText: placeholder,
-              hintStyle: TextStyle(fontSize: 14),
+          height: 10,
+        ),
+        if (defaultValue == null)
+          SizedBox(
+            height: 50,
+            child: TextFormField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(width: 3, color: Color(0xffaeaeae)),
+                    borderRadius: BorderRadius.circular(8)),
+                hintText: placeholder,
+                hintStyle: TextStyle(fontSize: 14),
+              ),
             ),
           ),
-        )
+        if (defaultValue != null)
+          SizedBox(
+            height: 50,
+            child: TextFormField(
+              initialValue: defaultValue,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(width: 3, color: Color(0xffaeaeae)),
+                    borderRadius: BorderRadius.circular(8)),
+                hintText: placeholder,
+                hintStyle: TextStyle(fontSize: 14),
+              ),
+            ),
+          )
       ],
     );
   }
@@ -69,11 +88,9 @@ class PasswordFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          // adresseemailvwR (289:522)
-          margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 205 * fem, 10 * fem),
-
           child: Text(
             fieldName,
             style: safeGoogleFont(
@@ -85,6 +102,9 @@ class PasswordFieldWidget extends StatelessWidget {
               color: const Color(0xbf000000),
             ),
           ),
+        ),
+        SizedBox(
+          height: 10,
         ),
         SizedBox(
           height: 50,
@@ -105,26 +125,26 @@ class PasswordFieldWidget extends StatelessWidget {
 }
 
 class NumberFieldWidget extends StatelessWidget {
-  const NumberFieldWidget({
-    super.key,
-    required this.fem,
-    required this.ffem,
-    required this.fieldName,
-    required this.placeholder,
-  });
+  const NumberFieldWidget(
+      {super.key,
+      required this.fem,
+      required this.ffem,
+      required this.fieldName,
+      required this.placeholder,
+      this.defaultValue});
 
   final double fem;
   final double ffem;
   final String fieldName;
   final String placeholder;
+  final String? defaultValue;
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          // adresseemailvwR (289:522)
-          margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 205 * fem, 10 * fem),
           child: Text(
             fieldName,
             style: safeGoogleFont(
@@ -138,19 +158,39 @@ class NumberFieldWidget extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 50,
-          child: TextFormField(
-            keyboardType: TextInputType.number,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(width: 3, color: Color(0xffaeaeae)),
-                  borderRadius: BorderRadius.circular(8)),
-              hintText: placeholder,
-              hintStyle: TextStyle(fontSize: 14),
+          height: 10,
+        ),
+        if (defaultValue == null)
+          SizedBox(
+            height: 50,
+            child: TextFormField(
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(width: 3, color: Color(0xffaeaeae)),
+                    borderRadius: BorderRadius.circular(8)),
+                hintText: placeholder,
+                hintStyle: TextStyle(fontSize: 14),
+              ),
             ),
           ),
-        )
+        if (defaultValue != null)
+          SizedBox(
+            height: 50,
+            child: TextFormField(
+              initialValue: defaultValue,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(width: 3, color: Color(0xffaeaeae)),
+                    borderRadius: BorderRadius.circular(8)),
+                hintText: placeholder,
+                hintStyle: TextStyle(fontSize: 14),
+              ),
+            ),
+          )
       ],
     );
   }
