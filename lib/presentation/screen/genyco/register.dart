@@ -1,4 +1,4 @@
-import 'package:benda/presentation/screen/genyco/home/home_layout.dart';
+import 'package:benda/presentation/screen/genyco/home/home.dart';
 import 'package:benda/presentation/widgets/form_field.dart';
 import 'package:benda/utils.dart';
 import 'package:flutter/material.dart';
@@ -96,11 +96,13 @@ class _RegisterGenyco extends State<RegisterGenyco> {
                           ),
                         ),
                       ),
+                      SizedBox(
+                        height: 10,
+                      ),
                       Container(
                         margin: EdgeInsets.fromLTRB(
                             0 * fem, 0 * fem, 1 * fem, 20 * fem),
-                        padding: EdgeInsets.fromLTRB(
-                            22 * fem, 10 * fem, 17.5 * fem, 10 * fem),
+                        padding: EdgeInsets.symmetric(horizontal: 10),
                         width: double.infinity,
                         decoration: BoxDecoration(
                           border: Border.all(color: const Color(0xffaeaeae)),

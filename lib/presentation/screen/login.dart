@@ -1,4 +1,4 @@
-import 'package:benda/presentation/screen/genyco/home/home_layout.dart';
+import 'package:benda/presentation/screen/genyco/home/home.dart';
 import 'package:benda/presentation/widgets/form_field.dart';
 import 'package:benda/utils.dart';
 import 'package:flutter/material.dart';

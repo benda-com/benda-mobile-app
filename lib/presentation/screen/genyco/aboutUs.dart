@@ -167,8 +167,7 @@ class AboutUs extends StatelessWidget {
                 ),
                 Container(
                   // frame90cf1 (254:264)
-                  margin: EdgeInsets.fromLTRB(
-                      21 * fem, 0 * fem, 176 * fem, 30 * fem),
+                  margin: EdgeInsets.only(bottom: 10, left: 20),
                   padding:
                       EdgeInsets.fromLTRB(3 * fem, 0 * fem, 0 * fem, 0 * fem),
                   width: double.infinity,
@@ -220,8 +219,7 @@ class AboutUs extends StatelessWidget {
                 ),
                 Container(
                   // frame96g2b (254:373)
-                  margin:
-                      EdgeInsets.fromLTRB(17 * fem, 0 * fem, 72 * fem, 0 * fem),
+                  margin: EdgeInsets.only(left: 20),
                   padding:
                       EdgeInsets.fromLTRB(3 * fem, 0 * fem, 0 * fem, 0 * fem),
                   width: double.infinity,

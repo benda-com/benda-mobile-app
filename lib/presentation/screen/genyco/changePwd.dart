@@ -35,7 +35,7 @@ class ChangePwd extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                margin: EdgeInsets.only(top: 40, bottom: 20, left: 25),
+                margin: EdgeInsets.only(top: 50, bottom: 30, left: 25),
                 child: Text(
                   'Changer de mot de passe',
                   style: safeGoogleFont(
@@ -97,7 +97,7 @@ class ChangePwd extends StatelessWidget {
                   ),
                   child: Container(
                     width: double.infinity,
-                    height: 38 * fem,
+                    height: 50 * fem,
                     decoration: BoxDecoration(
                       border: Border.all(color: Color(0xff0072c5)),
                       color: Color(0xffffffff),

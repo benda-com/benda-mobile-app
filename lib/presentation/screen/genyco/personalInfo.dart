@@ -99,8 +99,7 @@ class PersonalInfo extends StatelessWidget {
               ),
               Container(
                 // frame63HBD (254:438)
-                margin:
-                    EdgeInsets.fromLTRB(240 * fem, 0 * fem, 0 * fem, 62 * fem),
+
                 child: TextButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -113,8 +112,8 @@ class PersonalInfo extends StatelessWidget {
                     padding: EdgeInsets.zero,
                   ),
                   child: Container(
-                    width: 118 * fem,
-                    height: 38 * fem,
+                    width: 200,
+                    height: 50 * fem,
                     decoration: BoxDecoration(
                       border: Border.all(color: Color(0xff0072c5)),
                       color: Color(0xffffffff),

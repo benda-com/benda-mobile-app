@@ -43,7 +43,6 @@ dependencies:
   equatable:
   http:
   dio:
-  fl_chart: ^0.63.0
 
 dev_dependencies:
   flutter_test:

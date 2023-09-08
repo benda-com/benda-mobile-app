@@ -45,7 +45,7 @@ class _EditProfil extends State<EditProfil> {
           width: double.infinity,
           child: Container(
             // iphone13promax14YfH (254:440)
-            padding: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 135 * fem),
+
             width: double.infinity,
             decoration: BoxDecoration(
               color: Color(0xfff8f9f9),
@@ -55,12 +55,26 @@ class _EditProfil extends State<EditProfil> {
               children: [
                 Container(
                   // autogroupjx9dzZD (TjxnemZ71D4JKf1fCaJx9d)
-                  margin: EdgeInsets.symmetric(horizontal: 25),
+                  margin: EdgeInsets.symmetric(horizontal: 30),
                   width: double.infinity,
 
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Container(
+                        // infopersonnelSW3 (254:412)
+                        margin: EdgeInsets.only(top: 40, bottom: 20),
+                        child: Text(
+                          'Edition de profil',
+                          style: safeGoogleFont(
+                            'Roboto',
+                            fontSize: 20 * ffem,
+                            fontWeight: FontWeight.w500,
+                            height: 1.8 * ffem / fem,
+                            color: Color(0xff5c5a5a),
+                          ),
+                        ),
+                      ),
                       TextFieldWidget(
                           fem: fem,
                           ffem: ffem,
@@ -168,7 +182,7 @@ class _EditProfil extends State<EditProfil> {
                     ),
                     child: Container(
                       width: double.infinity,
-                      height: 38 * fem,
+                      height: 50 * fem,
                       decoration: BoxDecoration(
                         border: Border.all(color: Color(0xff0072c5)),
                         color: Color(0xffffffff),

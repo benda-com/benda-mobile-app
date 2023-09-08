@@ -1,8 +1,4 @@
-import 'package:benda/presentation/screen/genyco/home/home_layout.dart';
-import 'package:benda/presentation/screen/genyco/params/pregnant_params_layout.dart';
-import 'package:benda/presentation/screen/login.dart';
 import 'package:benda/presentation/screen/splash_screen.dart';
-import 'package:benda/presentation/screen/genyco/home/account.dart';
 import 'package:flutter/material.dart';
 import "package:benda/utils.dart";
 import 'package:flutter/services.dart';
@@ -35,7 +31,7 @@ class MyApp extends StatelessWidget {
             systemNavigationBarColor: Colors.black,
             systemNavigationBarIconBrightness: Brightness.dark,
             statusBarIconBrightness: Brightness.dark),
-        child: const Login(),
+        child: const SplashScreen(),
       ),
     );
   }
