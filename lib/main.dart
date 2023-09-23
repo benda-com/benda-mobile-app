@@ -1,8 +1,8 @@
+import 'package:benda/presentation/screen/genyco/params/pregnant_params.dart';
+import 'package:benda/presentation/screen/genyco/params/pregnant_params_layout.dart';
+import 'package:benda/presentation/screen/pregnant/home.dart';
 import 'package:benda/presentation/screen/pregnant/home_layout.dart';
-import 'package:benda/presentation/screen/pregnant/register.dart';
-import 'package:benda/presentation/screen/pregnant/search_genyco.dart';
-import 'package:benda/presentation/screen/pregnant/verify_device.dart';
-
+import 'package:benda/presentation/screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import "package:benda/utils.dart";
 import 'package:flutter/services.dart';
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
             systemNavigationBarColor: Colors.black,
             systemNavigationBarIconBrightness: Brightness.dark,
             statusBarIconBrightness: Brightness.dark),
-        child: const HomeLayout(),
+        child: const PregnantDetails(),
       ),
     );
   }

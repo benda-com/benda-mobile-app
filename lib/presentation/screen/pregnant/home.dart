@@ -117,25 +117,56 @@ class _HomePregnantState extends State<HomePregnant> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ParameterCardWidget(fem: fem, ffem: ffem),
-                ParameterCardWidget(fem: fem, ffem: ffem),
+                ParameterCardWidget(
+                  fem: fem,
+                  ffem: ffem,
+                  paramName: "Protéinurie",
+                  paramTime: "12h00",
+                  paramUnit: "mg",
+                  status: "Normal",
+                  paramValue: 12,
+                ),
+                ParameterCardWidget(
+                  fem: fem,
+                  ffem: ffem,
+                  paramName: "Temperature",
+                  paramTime: "12h00",
+                  paramUnit: "°C",
+                  status: "Normal",
+                  paramValue: 37,
+                ),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ParameterCardWidget(fem: fem, ffem: ffem),
-                ParameterCardWidget(fem: fem, ffem: ffem),
+                ParameterCardWidget(
+                  fem: fem,
+                  ffem: ffem,
+                  paramName: "Freg. Card",
+                  paramTime: "12h00",
+                  paramUnit: "bpm",
+                  status: "Normal",
+                  paramValue: 120,
+                ),
+                ParameterCardWidget(
+                  fem: fem,
+                  ffem: ffem,
+                  paramName: "TA",
+                  paramTime: "12h00",
+                  paramUnit: "mmHg",
+                  status: "Normal",
+                  paramValue: 120,
+                ),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ParameterCardWidget(fem: fem, ffem: ffem),
                 Container(
-                    width: 170,
+                    width: 140,
                     height: 80,
                     child: Center(
                         child: Text(

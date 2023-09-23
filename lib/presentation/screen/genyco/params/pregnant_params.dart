@@ -1,4 +1,7 @@
-import 'package:benda/presentation/widgets/graph.dart';
+import 'package:benda/presentation/widgets/graph_freq_card.dart';
+import 'package:benda/presentation/widgets/graph_proteinerie.dart';
+import 'package:benda/presentation/widgets/graph_ta.dart';
+import 'package:benda/presentation/widgets/graph_temp.dart';
 import 'package:benda/presentation/widgets/parameter_card.dart';
 import 'package:benda/utils.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +16,7 @@ class PregnantParams extends StatefulWidget {
 
 class _PregnantParamsState extends State<PregnantParams> {
   bool _isVisible = false;
+  List<bool> wichgraph = [true, false, false, false];
 
   void showPrediction() {
     setState(() {
@@ -104,33 +108,108 @@ class _PregnantParamsState extends State<PregnantParams> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        FilterParameterWidget(
-                            fem: fem, ffem: ffem, textButton: "Proteine"),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              wichgraph = [true, false, false, false];
+                            });
+                          },
+                          child: FilterParameterWidget(
+                              fem: fem,
+                              ffem: ffem,
+                              textColor: wichgraph[0] == true
+                                  ? Colors.white
+                                  : Colors.black,
+                              buttonColor: wichgraph[0] == true
+                                  ? Colors.black
+                                  : Colors.white,
+                              textButton: "Proteine"),
+                        ),
                         SizedBox(
                           width: 20 * fem,
                         ),
-                        FilterParameterWidget(
-                            fem: fem, ffem: ffem, textButton: "TA"),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              wichgraph = [false, true, false, false];
+                            });
+                          },
+                          child: FilterParameterWidget(
+                              fem: fem,
+                              ffem: ffem,
+                              textColor: wichgraph[1] == true
+                                  ? Colors.white
+                                  : Colors.black,
+                              buttonColor: wichgraph[1] == true
+                                  ? Colors.black
+                                  : Colors.white,
+                              textButton: "TA"),
+                        ),
                         SizedBox(
                           width: 20 * fem,
                         ),
-                        FilterParameterWidget(
-                            fem: fem, ffem: ffem, textButton: "Glycémie"),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              wichgraph = [false, false, true, false];
+                            });
+                          },
+                          child: FilterParameterWidget(
+                              fem: fem,
+                              ffem: ffem,
+                              textColor: wichgraph[2] == true
+                                  ? Colors.white
+                                  : Colors.black,
+                              buttonColor: wichgraph[2] == true
+                                  ? Colors.black
+                                  : Colors.white,
+                              textButton: "Freq.Card"),
+                        ),
                         SizedBox(
                           width: 20 * fem,
                         ),
-                        FilterParameterWidget(
-                            fem: fem, ffem: ffem, textButton: "Temp"),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              wichgraph = [false, false, false, true];
+                            });
+                          },
+                          child: FilterParameterWidget(
+                              fem: fem,
+                              ffem: ffem,
+                              textColor: wichgraph[3] == true
+                                  ? Colors.white
+                                  : Colors.black,
+                              buttonColor: wichgraph[3] == true
+                                  ? Colors.black
+                                  : Colors.white,
+                              textButton: "Temp"),
+                        ),
                       ],
                     ),
                   ),
                   SizedBox(
                     height: 20,
                   ),
-                  Container(
-                      // image2DMH (163:215)
-
-                      child: GraphWidget()),
+                  if (wichgraph[0])
+                    Container(
+                        child: GraphProteinerieWidget(
+                      graphName: "proteinerie",
+                    )),
+                  if (wichgraph[1])
+                    Container(
+                        child: GraphTAWidget(
+                      graphName: "Tension arterielle",
+                    )),
+                  if (wichgraph[3])
+                    Container(
+                        child: GraphTempWidget(
+                      graphName: "Temperature",
+                    )),
+                  if (wichgraph[2])
+                    Container(
+                        child: GraphFreqCardWidget(
+                            graphName: "Frequence cardiaque")),
                   SizedBox(
                     height: 20,
                   ),
@@ -138,23 +217,48 @@ class _PregnantParamsState extends State<PregnantParams> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      ParameterCardWidget(fem: fem, ffem: ffem),
-                      ParameterCardWidget(fem: fem, ffem: ffem),
+                      ParameterCardWidget(
+                        fem: fem,
+                        ffem: ffem,
+                        paramName: "Protéinurie",
+                        paramTime: "12h00",
+                        paramUnit: "mg",
+                        status: "Normal",
+                        paramValue: 12,
+                      ),
+                      ParameterCardWidget(
+                        fem: fem,
+                        ffem: ffem,
+                        paramName: "Temperature",
+                        paramTime: "12h00",
+                        paramUnit: "°C",
+                        status: "Normal",
+                        paramValue: 37,
+                      ),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      ParameterCardWidget(fem: fem, ffem: ffem),
-                      ParameterCardWidget(fem: fem, ffem: ffem),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ParameterCardWidget(fem: fem, ffem: ffem),
+                      ParameterCardWidget(
+                        fem: fem,
+                        ffem: ffem,
+                        paramName: "Freq. Card",
+                        paramTime: "12h00",
+                        paramUnit: "bpm",
+                        status: "Normal",
+                        paramValue: 120,
+                      ),
+                      ParameterCardWidget(
+                        fem: fem,
+                        ffem: ffem,
+                        paramName: "TA",
+                        paramTime: "12h00",
+                        paramUnit: "mmHg",
+                        status: "Normal",
+                        paramValue: 120,
+                      ),
                     ],
                   ),
                   SizedBox(

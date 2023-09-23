@@ -56,6 +56,7 @@ class GenycoInfo extends StatelessWidget {
                       ),
                       Text(
                         "Faire Naitre est ma passion",
+                        textAlign: TextAlign.center,
                         style: safeGoogleFont('Inter',
                             fontSize: 16 * ffem,
                             fontWeight: FontWeight.w400,

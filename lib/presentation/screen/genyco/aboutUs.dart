@@ -57,7 +57,11 @@ class AboutUs extends StatelessWidget {
                     maxWidth: 348 * fem,
                   ),
                   child: Text(
-                    '           Lorem ipsum dolor sit amet consectetur. Tellus at massa donec egestas tellus mauris phasellus facilisi neque. In fusce non molestie consequat diam a. Etiam erat molestie egestas vel id. Sollicitudin phasellus integer porta convallis amet. Non ullamcorper at proin duis varius. Vel pellentesque sed facilisis ipsum dolor risus eleifend quis pharetra. Volutpat lectus facilisi ut viverra. Aenean nunc sapien commodo mauris tristique cras vitae. Eros nascetur at arcu amet aliquet hendrerit sed libero. Amet massa nulla sit pellentesque massa mauris neque metus. Ut netus nisl sit risus feugiat. In malesuada est risus et faucibus. Ut et tellus adipiscing amet velit etiam est.',
+                    '''        Bènda est une start up créée par un groupe de jeunes camerounais et conçu pour porter assistance en temps réel aux femmes enceintes afin de leurs prédire et prévenir les risques de survenance de la prééclampsie.
+Grace à notre montre intelligente et notre application associées à l’intelligence artificielle, nous permettons à la femme enceinte de connaitre sa pression artérielle, sa température, son taux d’oxygène, sa protéinurie et sa glycosurie ; des paramètres médicaux nécessaires à surveiller pour diagnostiquer la prééclampsie. Aussi une fois ces paramètres prélever, ils seront également envoyés au médecin associé à la femme enceinte avec des recommandations faites par l’analyse des données de notre intelligence artificielle. Ce qui permet à chaque femme d’avoir un suivi personnalisé et efficace.
+Nous sommes fiers de proposer une innovation exceptionnelle à nos consommateurs et d’aider nos utilisateurs à réaliser leur rêve.
+En collaborant avec nous, vous pouvez être assurés que vous bénéficierez d’une assistance de haute qualité et d’un engagement envers l’excellence.
+''',
                     style: safeGoogleFont(
                       'Roboto',
                       fontSize: 15 * ffem,

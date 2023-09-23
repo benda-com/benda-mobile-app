@@ -1,17 +1,16 @@
 import 'package:benda/presentation/screen/genyco/register.dart';
-import 'package:benda/presentation/screen/login.dart';
-import 'package:benda/presentation/screen/register.dart';
+import 'package:benda/presentation/screen/pregnant/register.dart';
 import 'package:benda/utils.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class Register extends StatefulWidget {
+  const Register({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     double baseWidth = 428;
@@ -47,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 margin:
                     EdgeInsets.fromLTRB(0 * fem, 0 * fem, 6 * fem, 44 * fem),
                 child: Text(
-                  'Bienvenue sur Benda',
+                  'S\'incrire en tant que :',
                   style: safeGoogleFont(
                     'Roboto',
                     fontSize: 22 * ffem,
@@ -65,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return const Login();
+                        return const RegisterGenyco();
                       },
                     ));
                   },
@@ -90,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               0 * fem, 0 * fem, 60 * fem, 0 * fem),
 
                           child: Text(
-                            'Connexion',
+                            "Gynecologue",
                             style: safeGoogleFont(
                               'Noto Sans',
                               fontSize: 14 * ffem,
@@ -99,18 +98,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               letterSpacing: 0.0140000002 * fem,
                               color: Color(0xffffffff),
                             ),
-                          ),
-                        ),
-                        Container(
-                          // vector9pT (115:53)
-                          margin: EdgeInsets.fromLTRB(
-                              0 * fem, 3 * fem, 0 * fem, 0 * fem),
-                          width: 14 * fem,
-                          height: 16 * fem,
-                          child: Image.asset(
-                            'images/lock.png',
-                            width: 14 * fem,
-                            height: 16 * fem,
                           ),
                         ),
                       ],
@@ -138,10 +125,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Container(
                         // buttonBm9 (I115:23;30:658)
-                        margin: EdgeInsets.fromLTRB(
-                            0 * fem, 0 * fem, 55.5 * fem, 0 * fem),
+
                         child: Text(
-                          'Commencer',
+                          'Femme en enceinte',
                           style: safeGoogleFont(
                             'Noto Sans',
                             fontSize: 14 * ffem,
@@ -152,25 +138,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                      Container(
-                        // vectorVG3 (115:57)
-                        // margin: EdgeInsets.fromLTRB(
-                        //     0 * fem, 0.99 * fem, 0 * fem, 0 * fem),
-                        width: 16 * fem,
-                        height: 9.99 * fem,
-                        child: Image.asset(
-                          'images/arrow2.png',
-                          width: 16 * fem,
-                          height: 9.99 * fem,
-                        ),
-                      ),
                     ],
                   ),
                 ),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return const Register();
+                      return const RegisterPregnant();
                     },
                   ));
                 },

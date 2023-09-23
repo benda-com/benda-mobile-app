@@ -6,29 +6,27 @@ class ParameterCardWidget extends StatelessWidget {
     super.key,
     required this.fem,
     required this.ffem,
-    // required this.paramName,
-    // required this.colorstatus,
-    // required this.status,
-    // required this.paramValue,
-    // required this.paramUnit,
-    // required this.paramTime,
+    required this.paramName,
+    required this.status,
+    required this.paramValue,
+    required this.paramUnit,
+    required this.paramTime,
   });
 
   final double fem;
   final double ffem;
-  // final String paramName;
-  // final double paramValue;
-  // final String paramUnit;
-  // final String paramTime;
-  // final Color colorstatus;
-  // final String status;
+  final String paramName;
+  final double paramValue;
+  final String paramUnit;
+  final String paramTime;
+  final String status;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: 20),
       height: 90 * fem,
-      width: 200 * fem,
+      width: 210 * fem,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -36,7 +34,7 @@ class ParameterCardWidget extends StatelessWidget {
           Container(
             // frame53hHh (186:140)
 
-            padding: EdgeInsets.fromLTRB(12 * fem, 4 * fem, 4 * fem, 4 * fem),
+            padding: EdgeInsets.fromLTRB(10 * fem, 4 * fem, 4 * fem, 4 * fem),
             height: double.infinity,
             decoration: BoxDecoration(
               border: Border.all(color: Color(0xffadabab)),
@@ -66,7 +64,7 @@ class ParameterCardWidget extends StatelessWidget {
                         margin: EdgeInsets.fromLTRB(
                             0 * fem, 0 * fem, 0 * fem, 5 * fem),
                         child: Text(
-                          'Protéinurie',
+                          paramName,
                           style: safeGoogleFont(
                             'Roboto',
                             fontSize: 16 * ffem,
@@ -78,7 +76,7 @@ class ParameterCardWidget extends StatelessWidget {
                       ),
                       Text(
                         // mgBs5 (186:129)
-                        '12 mg',
+                        '$paramValue $paramUnit',
                         style: safeGoogleFont(
                           'Roboto',
                           fontSize: 14 * ffem,
@@ -109,13 +107,15 @@ class ParameterCardWidget extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text(
-                            'Normal',
+                            status,
                             style: safeGoogleFont(
                               'Roboto',
                               fontSize: 7 * ffem,
                               fontWeight: FontWeight.w400,
                               height: 2.2857142857 * ffem / fem,
-                              color: Color(0xff03d932),
+                              color: status == "Normal"
+                                  ? Color(0xff03d932)
+                                  : Colors.red,
                             ),
                           ),
                         ),
