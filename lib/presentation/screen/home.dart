@@ -1,4 +1,3 @@
-import 'package:benda/presentation/screen/genyco/register.dart';
 import 'package:benda/presentation/screen/login.dart';
 import 'package:benda/presentation/screen/register.dart';
 import 'package:benda/utils.dart';

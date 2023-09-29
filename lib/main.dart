@@ -1,14 +1,20 @@
-import 'package:benda/presentation/screen/genyco/params/pregnant_params.dart';
-import 'package:benda/presentation/screen/genyco/params/pregnant_params_layout.dart';
-import 'package:benda/presentation/screen/pregnant/home.dart';
-import 'package:benda/presentation/screen/pregnant/home_layout.dart';
+import 'package:benda/data/repositories/auth_repository.dart';
+import 'package:benda/logic/auth/auth_cubit.dart';
 import 'package:benda/presentation/screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import "package:benda/utils.dart";
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider(
+        create: (context) => AuthCubit(authRepo: AuthRepository()),
+      ),
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -31,11 +37,13 @@ class MyApp extends StatelessWidget {
       // ),
       home: const AnnotatedRegion(
         value: SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
-            systemNavigationBarColor: Colors.black,
-            systemNavigationBarIconBrightness: Brightness.dark,
-            statusBarIconBrightness: Brightness.dark),
-        child: const PregnantDetails(),
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+          systemStatusBarContrastEnforced: false,
+          systemNavigationBarColor: Colors.white,
+          systemNavigationBarDividerColor: Colors.white,
+        ),
+        child: const SplashScreen(),
       ),
     );
   }

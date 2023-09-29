@@ -1,8 +1,11 @@
+import 'package:benda/data/model/register_model.dart';
+import 'package:benda/logic/auth/auth_cubit.dart';
 import 'package:benda/presentation/screen/genyco/home/home.dart';
 import 'package:benda/presentation/screen/login.dart';
 import 'package:benda/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterGenyco extends StatefulWidget {
   @override
@@ -43,6 +46,7 @@ class _RegisterGenyco extends State<RegisterGenyco> {
 
   @override
   Widget build(BuildContext context) {
+    final authCubit = BlocProvider.of<AuthCubit>(context);
     double baseWidth = 428;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
@@ -366,50 +370,78 @@ class _RegisterGenyco extends State<RegisterGenyco> {
                 SizedBox(
                   height: 20,
                 ),
-                Container(
-                  // filledbuttonrxP (115:75)
-                  margin:
-                      EdgeInsets.fromLTRB(1 * fem, 0 * fem, 0 * fem, 0 * fem),
-                  child: TextButton(
-                    onPressed: () {
-                      if (_formfield.currentState!.validate()) {
-                        print("success");
-                        emailController.clear();
-                        passController.clear();
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) {
-                              return const HomeGenyco();
-                            },
-                          ),
-                        );
-                      }
-                    },
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                    ),
-                    child: Container(
-                      height: 50 * fem,
-                      decoration: BoxDecoration(
-                        color: const Color(0xff0072c5),
-                        borderRadius: BorderRadius.circular(8 * fem),
+                BlocConsumer<AuthCubit, AuthState>(listener: (context, state) {
+                  if (state is RegisterCompleted) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return const HomeGenyco();
+                        },
                       ),
-                      child: Center(
-                        child: Text(
-                          'Créer un compte',
-                          style: safeGoogleFont(
-                            'Noto Sans',
-                            fontSize: 14 * ffem,
-                            fontWeight: FontWeight.w500,
-                            height: 1.4285714286 * ffem / fem,
-                            letterSpacing: 0.0140000002 * fem,
-                            color: const Color(0xffffffff),
+                    );
+                  }
+                }, builder: (context, state) {
+                  if (state is AuthLoading) {
+                    return const CircularProgressIndicator(
+                      color: Colors.blue,
+                    );
+                  }
+                  return Container(
+                    // filledbuttonrxP (115:75)
+                    margin:
+                        EdgeInsets.fromLTRB(1 * fem, 0 * fem, 0 * fem, 0 * fem),
+                    child: TextButton(
+                      onPressed: () {
+                        if (_formfield.currentState!.validate()) {
+                          if (emailController.text.isNotEmpty &&
+                              passController.text.isNotEmpty &&
+                              nameController.text.isNotEmpty &&
+                              phoneController.text.isNotEmpty &&
+                              matriculeController.text.isNotEmpty) {
+                            var fullName =
+                                nameController.text.trim().split(' ');
+
+                            String firstName = fullName[0];
+                            String? lastName = fullName[1];
+                            RegisterModel registerModel = RegisterModel(
+                                firstName: firstName,
+                                lastName: lastName,
+                                email: emailController.text.trim(),
+                                dateOfBirth: "2023-09-23",
+                                phoneNumber: phoneController.text.trim(),
+                                password: passController.text.trim(),
+                                isGynecologist: true,
+                                isPregnantWoman: false);
+                            authCubit.register(registerModel);
+                          }
+                        }
+                      },
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                      ),
+                      child: Container(
+                        height: 50 * fem,
+                        decoration: BoxDecoration(
+                          color: const Color(0xff0072c5),
+                          borderRadius: BorderRadius.circular(8 * fem),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Créer un compte',
+                            style: safeGoogleFont(
+                              'Noto Sans',
+                              fontSize: 14 * ffem,
+                              fontWeight: FontWeight.w500,
+                              height: 1.4285714286 * ffem / fem,
+                              letterSpacing: 0.0140000002 * fem,
+                              color: const Color(0xffffffff),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                }),
                 SizedBox(
                   height: 18,
                 ),

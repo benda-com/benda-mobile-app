@@ -1,3 +1,4 @@
+import 'package:benda/presentation/screen/pregnant/notification.dart';
 import 'package:benda/presentation/widgets/genyco_card.dart';
 import 'package:benda/presentation/widgets/parameter_card.dart';
 import 'package:flutter/material.dart';
@@ -193,7 +194,17 @@ class _HomePregnantState extends State<HomePregnant> {
                       height: 1.2125 * ffem / fem,
                     ),
                   ),
-                  TextButton(onPressed: () {}, child: Text("Voir plus")),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) {
+                              return const NotificationPregnant();
+                            },
+                          ),
+                        );
+                      },
+                      child: Text("Voir plus")),
                 ],
               ),
             ),

@@ -1,8 +1,6 @@
 import "package:syncfusion_flutter_charts/charts.dart";
 import 'package:flutter/material.dart';
 import "package:intl/intl.dart";
-import "dart:async";
-import "dart:math" as math;
 
 class GraphTempWidget extends StatefulWidget {
   const GraphTempWidget({super.key, required this.graphName});

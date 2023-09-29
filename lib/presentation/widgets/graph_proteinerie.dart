@@ -5,9 +5,10 @@ import "dart:async";
 import "dart:math" as math;
 
 class GraphProteinerieWidget extends StatefulWidget {
-  const GraphProteinerieWidget({super.key, required this.graphName});
+  const GraphProteinerieWidget({super.key, required this.graphName, required this.selectedIndex});
 
   final String graphName;
+  final int selectedIndex;
   @override
   State<GraphProteinerieWidget> createState() => _GraphProteinerieWidgetState();
 }
@@ -17,12 +18,15 @@ class _GraphProteinerieWidgetState extends State<GraphProteinerieWidget> {
   late ZoomPanBehavior _zoomPanBehavior;
   late TooltipBehavior _tooltipBehavior;
   late ChartSeriesController _chartSeriesController;
+  Timer? timer;
+  int timeM = 00;
+  int timeH = 21;
 
   @override
   void initState() {
     _chartData = getChartData();
     _tooltipBehavior = TooltipBehavior(enable: true);
-    Timer.periodic(const Duration(seconds: 1), updateDataSource);
+    timer = Timer.periodic(const Duration(seconds: 1), updateDataSource);
     _zoomPanBehavior = ZoomPanBehavior(
       enablePinching: true,
       enableDoubleTapZooming: true,
@@ -33,51 +37,67 @@ class _GraphProteinerieWidgetState extends State<GraphProteinerieWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: SfCartesianChart(
-        title: ChartTitle(text: "Proteinerie"),
+  void dispose() {
+    super.dispose();
+    timer!.cancel();
+  }
 
-        tooltipBehavior: _tooltipBehavior,
-        zoomPanBehavior: _zoomPanBehavior,
-        series: <ChartSeries>[
-          LineSeries<ParamData, DateTime>(
-              onRendererCreated: (ChartSeriesController controller) {
-                _chartSeriesController = controller;
-              },
-              name: "Proteinerie",
-              dataSource: _chartData,
-              xValueMapper: (ParamData sales, _) => sales.peroid,
-              yValueMapper: (ParamData sales, _) => sales.value,
-              // dataLabelSettings: DataLabelSettings(isVisible: true),
-              enableTooltip: true),
-        ],
-        primaryXAxis: DateTimeAxis(
-            edgeLabelPlacement: EdgeLabelPlacement.shift,
-            dateFormat: DateFormat.Hm(),
-            intervalType: DateTimeIntervalType.minutes),
-        // primaryXAxis: DateTimeAxis(
-        //   dateFormat: DateFormat.MMM(),
-        // ),
-        // primaryYAxis: NumericAxis(
-        //   minimum: 70,
-        //   maximum: 130,
-        // ),
-      ),
+  @override
+  Widget build(BuildContext context) {
+    return SfCartesianChart(
+      title: ChartTitle(text: widget.graphName),
+
+      tooltipBehavior: _tooltipBehavior,
+      zoomPanBehavior: _zoomPanBehavior,
+      series: <ChartSeries>[
+        LineSeries<ParamData, DateTime>(
+            onRendererCreated: (ChartSeriesController controller) {
+              _chartSeriesController = controller;
+            },
+            name: widget.graphName,
+            dataSource: _chartData,
+            xValueMapper: (ParamData sales, _) => sales.peroid,
+            yValueMapper: (ParamData sales, _) => sales.value,
+            // dataLabelSettings: DataLabelSettings(isVisible: true),
+            enableTooltip: true),
+      ],
+      primaryXAxis: DateTimeAxis(
+          edgeLabelPlacement: EdgeLabelPlacement.shift,
+          dateFormat: DateFormat.Hm(),
+          intervalType: DateTimeIntervalType.minutes),
+      // primaryXAxis: DateTimeAxis(
+      //   dateFormat: DateFormat.MMM(),
+      // ),
+      // primaryYAxis: NumericAxis(
+      //   minimum: 70,
+      //   maximum: 130,
+      // ),
     );
   }
 
-  int timeM = 00;
-  int timeH = 21;
   void updateDataSource(Timer timer) {
     DateTime dateTime;
     if (timeM < 60) {
       dateTime = DateTime(2023, 09, 22, timeH, timeM++, 10);
-      _chartData.add(
-          ParamData(peroid: dateTime, value: (math.Random().nextInt(60) + 40)));
+      if(widget.selectedIndex == 0) {
+        _chartData.add(
+            ParamData(peroid: dateTime, value: (math.Random().nextInt(60) + 40)));
+      } else if(widget.selectedIndex == 1){
+        _chartData.add(
+            ParamData(peroid: dateTime, value: (math.Random().nextInt(80) + 40)));
+      } else if(widget.selectedIndex == 2){
+        _chartData.add(
+            ParamData(peroid: dateTime, value: (math.Random().nextInt(100) + 40)));
+      } else {
+        _chartData.add(
+            ParamData(peroid: dateTime, value: (math.Random().nextInt(120) + 40)));
+      }
       _chartData.removeAt(0);
       _chartSeriesController.updateDataSource(
           addedDataIndex: _chartData.length - 1, removedDataIndex: 0);
+      setState(() {
+
+      });
     } else {
       dateTime = DateTime(2023, 09, 22, timeH++, timeM, 10);
       _chartData.add(

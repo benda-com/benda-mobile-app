@@ -1,7 +1,5 @@
 import 'package:benda/presentation/widgets/device_card.dart';
-import 'package:benda/presentation/widgets/parameter_card.dart';
 import 'package:flutter/material.dart';
-import 'package:benda/utils.dart';
 
 class DeviceHome extends StatefulWidget {
   const DeviceHome({super.key});

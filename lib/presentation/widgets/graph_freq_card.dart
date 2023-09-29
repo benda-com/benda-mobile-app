@@ -17,6 +17,8 @@ class _GraphFreqCardWidgetState extends State<GraphFreqCardWidget> {
   late ZoomPanBehavior _zoomPanBehavior;
   late TooltipBehavior _tooltipBehavior;
   late ChartSeriesController _chartSeriesController;
+  int timeM = 00;
+  int timeH = 21;
 
   @override
   void initState() {
@@ -67,8 +69,6 @@ class _GraphFreqCardWidgetState extends State<GraphFreqCardWidget> {
     );
   }
 
-  int timeM = 00;
-  int timeH = 21;
   void updateDataSource(Timer timer) {
     DateTime dateTime;
     if (timeM < 60) {

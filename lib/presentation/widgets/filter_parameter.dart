@@ -2,19 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:benda/utils.dart';
 
 class FilterParameterWidget extends StatelessWidget {
-  const FilterParameterWidget(
-      {super.key,
-      required this.fem,
-      required this.ffem,
-      required this.textButton,
-      required this.buttonColor,
-      required this.textColor});
+  const FilterParameterWidget({
+    super.key,
+    required this.fem,
+    required this.ffem,
+    required this.textButton,
+    required this.isSelected,
+  });
 
   final double fem;
   final double ffem;
   final String textButton;
-  final Color buttonColor;
-  final Color textColor;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,7 @@ class FilterParameterWidget extends StatelessWidget {
       width: 74.5 * fem,
       height: double.infinity,
       decoration: BoxDecoration(
-        color: buttonColor,
+        color: isSelected ? Colors.black : Colors.white,
         borderRadius: BorderRadius.circular(8 * fem),
       ),
       child: Center(
@@ -35,7 +34,7 @@ class FilterParameterWidget extends StatelessWidget {
             fontSize: 10 * ffem,
             fontWeight: FontWeight.w400,
             height: 1.2125 * ffem / fem,
-            color: textColor,
+            color: isSelected ? Colors.white : Colors.black,
           ),
         ),
       ),

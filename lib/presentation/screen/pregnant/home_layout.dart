@@ -1,9 +1,10 @@
-import 'package:benda/presentation/screen/genyco/aboutUs.dart';
-import 'package:benda/presentation/screen/genyco/help.dart';
-import 'package:benda/presentation/screen/genyco/home/account.dart';
+import 'package:benda/presentation/screen/aboutUs.dart';
+import 'package:benda/presentation/screen/pregnant/help.dart';
+import 'package:benda/presentation/screen/pregnant/account.dart';
 import 'package:benda/presentation/screen/pregnant/device_home.dart';
 import 'package:benda/presentation/screen/pregnant/genyco_info.dart';
 import 'package:benda/presentation/screen/pregnant/home.dart';
+import 'package:benda/presentation/screen/pregnant/notification.dart';
 import 'package:benda/presentation/screen/pregnant/register.dart';
 import 'package:flutter/material.dart';
 
@@ -44,7 +45,15 @@ class _HomeLayoutState extends State<HomeLayout> {
         centerTitle: true,
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return const NotificationPregnant();
+                    },
+                  ),
+                );
+              },
               icon: Icon(
                 Icons.notifications,
                 color: Color.fromARGB(255, 92, 91, 91),

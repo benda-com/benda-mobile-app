@@ -38,21 +38,16 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SingleChildScrollView(
-      // iphone13promax16KjV (254:504)
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            // autogroupctwpemm (Tjxkrji7a4egG1Mf9ycTWP)
             margin: EdgeInsets.symmetric(horizontal: 25),
             width: double.infinity,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  // frame1188KZ (254:562)
-
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -163,14 +158,6 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                                   ffem: ffem,
                                   textName: 'Age',
                                   textValue: '24 ans'),
-                              SizedBox(
-                                height: 30 * fem,
-                              ),
-                              InfoItemWidget(
-                                  fem: fem,
-                                  ffem: ffem,
-                                  textName: 'Hôpital',
-                                  textValue: 'hôpital Laquintine de Douala'),
                             ],
                           ),
                         ),
@@ -273,7 +260,7 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                         InfoItemWidget(
                             fem: fem,
                             ffem: ffem,
-                            textName: 'Protéine',
+                            textName: 'Protéinerie',
                             textValue: '30mmHG'),
                         SizedBox(
                           height: 17 * fem,
@@ -289,7 +276,7 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                         InfoItemWidget(
                             fem: fem,
                             ffem: ffem,
-                            textName: 'Glycémie',
+                            textName: 'Saturation en oxygène',
                             textValue: '30mmHG'),
                         SizedBox(
                           height: 17 * fem,
@@ -299,6 +286,30 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                             ffem: ffem,
                             textName: 'Température',
                             textValue: '30 C'),
+                        SizedBox(
+                          height: 17 * fem,
+                        ),
+                        InfoItemWidget(
+                            fem: fem,
+                            ffem: ffem,
+                            textName: 'Votre origin',
+                            textValue: 'Africain'),
+                        SizedBox(
+                          height: 17 * fem,
+                        ),
+                        InfoItemWidget(
+                            fem: fem,
+                            ffem: ffem,
+                            textName: 'Conception in vitro',
+                            textValue: 'Oui'),
+                        SizedBox(
+                          height: 17 * fem,
+                        ),
+                        InfoItemWidget(
+                            fem: fem,
+                            ffem: ffem,
+                            textName: 'Votre origin',
+                            textValue: 'Africain'),
                       ],
                     ),
                   ),

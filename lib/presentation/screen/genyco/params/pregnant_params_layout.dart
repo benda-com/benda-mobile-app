@@ -4,7 +4,16 @@ import 'package:benda/presentation/screen/genyco/params/pregnant_params.dart';
 import 'package:flutter/material.dart';
 
 class PregnantDetails extends StatefulWidget {
-  const PregnantDetails({super.key});
+  const PregnantDetails({
+    super.key,
+    // required this.pregnantName,
+    // required this.nberOfWeek,
+    // required this.age
+  });
+
+  // final String pregnantName;
+  // final int nberOfWeek;
+  // final int age;
 
   @override
   State<PregnantDetails> createState() => _PregnantDetails();

@@ -1,8 +1,8 @@
-import 'package:benda/presentation/screen/genyco/aboutUs.dart';
+import 'package:benda/data/model/pregnant_model.dart';
+import 'package:benda/presentation/screen/aboutUs.dart';
 import 'package:benda/presentation/screen/genyco/help.dart';
 import 'package:benda/presentation/screen/genyco/home/account.dart';
 import 'package:benda/presentation/screen/genyco/register.dart';
-import 'package:benda/model/pregnant_model.dart';
 import 'package:flutter/material.dart';
 import 'package:benda/presentation/widgets/filter_button.dart';
 import 'package:benda/presentation/widgets/pregnant_card.dart';
