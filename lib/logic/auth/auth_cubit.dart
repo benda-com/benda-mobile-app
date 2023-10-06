@@ -21,6 +21,7 @@ class AuthCubit extends Cubit<AuthState> {
           ResponseModel(isSuccess: true, message: "Registration completed!");
     } else {
       emit(AuthInitial());
+      emit(AuthFailed(response.statusMessage!));
       debugPrint(response.statusMessage!);
       responseModel =
           ResponseModel(isSuccess: false, message: response.statusMessage!);
@@ -33,7 +34,8 @@ class AuthCubit extends Cubit<AuthState> {
     Response response = await authRepo.login(email: email, password: password);
     ResponseModel responseModel;
     if (response.statusCode == 200) {
-      emit(LoginCompleted(response.data["token"]));
+      emit(LoginCompleted(response.data["token"],
+          response.data["is_gynecologist"], response.data['id']));
       debugPrint(response.data["token"]);
       responseModel =
           ResponseModel(isSuccess: true, message: "Login completed!");

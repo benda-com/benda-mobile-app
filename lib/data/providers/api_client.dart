@@ -23,6 +23,13 @@ class ApiClient {
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization': 'Bearer $token'
     };
+    if (token != '') {
+      _header = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Token $token'
+      };
+    }
+
     _mainHeaders = _header;
   }
 

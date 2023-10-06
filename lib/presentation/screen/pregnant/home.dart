@@ -14,6 +14,13 @@ class HomePregnant extends StatefulWidget {
 class _HomePregnantState extends State<HomePregnant> {
   @override
   Widget build(BuildContext context) {
+    DateTime now = new DateTime.now();
+    var day = now.day;
+    var year = now.year;
+    var month = now.month;
+    var hour = now.hour + 1;
+    var minute = now.minute;
+
     double baseWidth = 428;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
@@ -38,7 +45,7 @@ class _HomePregnantState extends State<HomePregnant> {
                     ),
                   ),
                   Text(
-                    "15-09-2023 12:02",
+                    "$day-$month-$year $hour:$minute",
                     style: safeGoogleFont('Inter',
                         fontSize: 16 * ffem,
                         fontWeight: FontWeight.w500,

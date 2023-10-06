@@ -2,7 +2,7 @@ import 'package:benda/data/model/pregnant_model.dart';
 import 'package:benda/presentation/screen/aboutUs.dart';
 import 'package:benda/presentation/screen/genyco/help.dart';
 import 'package:benda/presentation/screen/genyco/home/account.dart';
-import 'package:benda/presentation/screen/genyco/register.dart';
+import 'package:benda/presentation/screen/login.dart';
 import 'package:flutter/material.dart';
 import 'package:benda/presentation/widgets/filter_button.dart';
 import 'package:benda/presentation/widgets/pregnant_card.dart';
@@ -209,7 +209,7 @@ class _HomeGenycoState extends State<HomeGenyco> {
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) {
-                    return RegisterGenyco();
+                    return Login();
                   },
                 ));
               },

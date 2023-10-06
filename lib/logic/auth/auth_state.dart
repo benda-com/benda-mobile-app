@@ -9,8 +9,10 @@ class AuthLoading extends AuthState {}
 
 class LoginCompleted extends AuthState {
   final String? token;
+  final bool? is_gynecologist;
+  final int? id;
 
-  LoginCompleted(this.token);
+  LoginCompleted(this.token, this.is_gynecologist, this.id);
 }
 
 class RegisterCompleted extends AuthState {

@@ -1,8 +1,16 @@
+import 'dart:math';
+
+import 'package:benda/data/model/register_model.dart';
+import 'package:benda/data/model/wright_parameters_model.dart';
+import 'package:benda/logic/auth/auth_cubit.dart';
+import 'package:benda/logic/wright_parameters/wright_parameters_cubit.dart';
 import 'package:benda/presentation/screen/login.dart';
 import 'package:benda/presentation/screen/pregnant/verify_device.dart';
 import 'package:benda/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterPregnant extends StatefulWidget {
   @override
@@ -13,17 +21,21 @@ class RegisterPregnant extends StatefulWidget {
 class _RegisterPregnant extends State<RegisterPregnant> {
   final emailController = TextEditingController();
   final passController = TextEditingController();
-  final nameController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
   final phoneController = TextEditingController();
   final weightController = TextEditingController();
   final tallController = TextEditingController();
   final gestWithPreeController = TextEditingController();
   final gestWithoutPreeController = TextEditingController();
   final betweenPregController = TextEditingController();
+  final ageController = TextEditingController();
+  final weekController = TextEditingController();
+  TextEditingController dateinput = TextEditingController();
 
   int _currentStep = 0;
-  String? _choiceInVitro = "oui";
-  String? _choiceSyn = "oui";
+  String? _choiceInVitro = "non";
+  String? _choiceSyn = "non";
   String? _choicePregnantWithPree = "non";
   String? _choicePregnant = "non";
   String? _choiceHyper = "non";
@@ -32,9 +44,16 @@ class _RegisterPregnant extends State<RegisterPregnant> {
 
   final _originList = [
     "Africain",
-    "Sud-Afrique",
+    "Sud-Asiatique",
     "Autre",
   ];
+
+  double makeBin(String? nameVar) {
+    if (nameVar == "oui") {
+      return 1;
+    }
+    return 0;
+  }
 
   String? _selectedValOrigin = "Africain";
 
@@ -55,8 +74,18 @@ class _RegisterPregnant extends State<RegisterPregnant> {
     return regExp.hasMatch(em);
   }
 
+  DateTime now = new DateTime.now();
+
+  @override
+  void initState() {
+    dateinput.text = "";
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final authCubit = BlocProvider.of<AuthCubit>(context);
+    final wrightParamsCubit = BlocProvider.of<WrightParametersCubit>(context);
     double baseWidth = 428;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
@@ -67,11 +96,9 @@ class _RegisterPregnant extends State<RegisterPregnant> {
         child: Column(
           children: [
             Container(
-              // fichier11PgB (I115:73;35:721)
               margin:
                   EdgeInsets.fromLTRB(1 * fem, 0 * fem, 0 * fem, 30.55 * fem),
               width: 80 * fem,
-
               child: Image.asset(
                 'images/test2-1.png',
                 fit: BoxFit.cover,
@@ -99,61 +126,205 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                       ),
                       if (_currentStep >= 2)
                         TextButton(
-                            onPressed: dtl.onStepContinue,
-                            child: Container(
-                              // filledbutton55Z (289:525)
+                          onPressed: dtl.onStepContinue,
+                          child: Container(
+                            height: 50 * fem,
+                            decoration: BoxDecoration(
+                              color: Color(0xff0072c5),
+                              borderRadius: BorderRadius.circular(8 * fem),
+                            ),
+                            child: BlocConsumer<WrightParametersCubit,
+                                WrightParametersState>(
+                              listener: (context, state) {
+                                if (state is WrightParametersCompleted) {
+                                  print("post parameter successfull");
+                                }
+                              },
+                              builder: (context, state) {
+                                return BlocConsumer<AuthCubit, AuthState>(
+                                  listener: (context, state) {
+                                    if (state is RegisterCompleted) {
+                                      String? email =
+                                          emailController.text.trim();
+                                      String? password =
+                                          passController.text.trim();
+                                      print("Successfull register");
 
-                              height: 50 * fem,
-                              decoration: BoxDecoration(
-                                color: Color(0xff0072c5),
-                                borderRadius: BorderRadius.circular(8 * fem),
-                              ),
-                              child: Center(
-                                child: TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (BuildContext context) {
-                                          return const VerifyDevice();
+                                      if (email.isNotEmpty &&
+                                          password.isNotEmpty) {
+                                        authCubit.login(email, password);
+                                      }
+                                    }
+
+                                    if (state is LoginCompleted) {
+                                      print("Successfull login");
+                                      double? gestWithout;
+                                      double? gestWithPree;
+                                      double? between;
+                                      double tall = double.parse(
+                                          tallController.text.trim());
+                                      double weight = double.parse(
+                                          weightController.text.trim());
+                                      if (gestWithPreeController
+                                          .text.isNotEmpty) {
+                                        gestWithPree = double.parse(
+                                            gestWithPreeController.text.trim());
+                                      }
+
+                                      if (gestWithoutPreeController
+                                          .text.isNotEmpty) {
+                                        gestWithout = double.parse(
+                                            gestWithoutPreeController.text
+                                                .trim());
+                                      }
+
+                                      if (betweenPregController
+                                          .text.isNotEmpty) {
+                                        between = double.parse(
+                                            betweenPregController.text.trim());
+                                      }
+
+                                      String? origin = _selectedValOrigin;
+                                      int age =
+                                          int.parse(ageController.text.trim());
+                                      double dia = makeBin(_choiceDia);
+                                      double hyper = makeBin(_choiceHyper);
+                                      double inVitro = makeBin(_choiceInVitro);
+                                      double preeFa = makeBin(_choicePreeFa);
+
+                                      double pregnantWithPree =
+                                          makeBin(_choicePregnantWithPree);
+                                      double syn = makeBin(_choiceSyn);
+
+                                      WrightParametersModel
+                                          wrightParametersModel =
+                                          WrightParametersModel(
+                                              age: now.year,
+                                              chronicHypertension: hyper,
+                                              diabetes: dia,
+                                              familyHistoryPe: preeFa,
+                                              height: tall,
+                                              inVitroConception: inVitro,
+                                              origin: origin,
+                                              parousNoPe:
+                                                  pregnantWithPree == 1 ? 0 : 1,
+                                              parousNoPeDifference:
+                                                  gestWithout ?? 0,
+                                              parousNoPeInterval: between ?? 0,
+                                              parousPe: pregnantWithPree,
+                                              parousPeDifference:
+                                                  gestWithPree ?? 0,
+                                              sle: syn,
+                                              weight: weight);
+                                      wrightParamsCubit.wrightParameters(
+                                          wrightParametersModel, state.token);
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) {
+                                            return const VerifyDevice();
+                                          },
+                                        ),
+                                      );
+                                      var params = {
+                                        "weight": weight,
+                                        "origin": origin,
+                                        "tall": tall,
+                                        "gestWithPree": gestWithPree,
+                                        "gestWithout": gestWithout,
+                                        "between": between,
+                                        "age": age,
+                                        "dia": dia,
+                                        "hyper": hyper,
+                                        "in vitro": inVitro,
+                                        "preeFa": preeFa,
+                                        "pregnant": pregnantWithPree,
+                                        "syn": syn
+                                      };
+                                      print(params);
+                                    }
+                                  },
+                                  builder: (context, state) {
+                                    if (state is AuthLoading) {
+                                      return const CircularProgressIndicator(
+                                        color: Colors.blue,
+                                      );
+                                    }
+                                    return Center(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          if (emailController.text.isNotEmpty &&
+                                              passController.text.isNotEmpty &&
+                                              firstNameController
+                                                  .text.isNotEmpty &&
+                                              lastNameController
+                                                  .text.isNotEmpty &&
+                                              phoneController.text.isNotEmpty) {
+                                            RegisterModel
+                                                registerModel = RegisterModel(
+                                                    firstName: firstNameController
+                                                        .text
+                                                        .trim(),
+                                                    lastName:
+                                                        lastNameController
+                                                            .text
+                                                            .trim(),
+                                                    email:
+                                                        emailController
+                                                            .text
+                                                            .trim(),
+                                                    dateOfBirth: dateinput.text,
+                                                    phoneNumber:
+                                                        phoneController
+                                                            .text
+                                                            .trim(),
+                                                    password: passController
+                                                        .text
+                                                        .trim(),
+                                                    isGynecologist: false,
+                                                    isPregnantWoman: true);
+                                            authCubit.register(registerModel);
+                                          }
                                         },
+                                        child: Text(
+                                          "Confirmer",
+                                          style: safeGoogleFont(
+                                            'Noto Sans',
+                                            fontSize: 14 * ffem,
+                                            fontWeight: FontWeight.w500,
+                                            height: 1.4285714286 * ffem / fem,
+                                            letterSpacing: 0.0140000002 * fem,
+                                            color: Color(0xffffffff),
+                                          ),
+                                        ),
                                       ),
                                     );
                                   },
-                                  child: Text(
-                                    "Confirmer",
-                                    style: safeGoogleFont(
-                                      'Noto Sans',
-                                      fontSize: 14 * ffem,
-                                      fontWeight: FontWeight.w500,
-                                      height: 1.4285714286 * ffem / fem,
-                                      letterSpacing: 0.0140000002 * fem,
-                                      color: Color(0xffffffff),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )),
-                      if (_currentStep < 2)
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      if (_currentStep == 0)
                         TextButton(
-                            onPressed: dtl.onStepContinue,
+                            onPressed: firstNameController.text.isNotEmpty &&
+                                    lastNameController.text.isNotEmpty &&
+                                    emailController.text.isNotEmpty &&
+                                    phoneController.text.isNotEmpty &&
+                                    passController.text.isNotEmpty &&
+                                    isValidEmail(emailController.text.trim())
+                                ? dtl.onStepContinue
+                                : null,
                             child: Text('Suivant')),
-                      // if (_currentStep == 0)
-                      //   TextButton(
-                      //       onPressed: nameController.text.isNotEmpty &&
-                      //               emailController.text.isNotEmpty &&
-                      //               phoneController.text.isNotEmpty &&
-                      //               passController.text.isNotEmpty &&
-                      //               isValidEmail(emailController.text.trim())
-                      //           ? dtl.onStepContinue
-                      //           : null,
-                      //       child: Text('Suivant')),
-                      // if (_currentStep == 1)
-                      //   TextButton(
-                      //       onPressed: weightController.text.isNotEmpty &&
-                      //               tallController.text.isNotEmpty
-                      //           ? dtl.onStepContinue
-                      //           : null,
-                      //       child: Text('Suivant')),
+                      if (_currentStep == 1)
+                        TextButton(
+                            onPressed: weightController.text.isNotEmpty &&
+                                    tallController.text.isNotEmpty &&
+                                    weekController.text.isNotEmpty &&
+                                    _choiceInVitro != null &&
+                                    _choiceSyn != null
+                                ? dtl.onStepContinue
+                                : null,
+                            child: Text('Suivant')),
                     ],
                   );
                 },
@@ -221,7 +392,7 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                 children: [
                   Container(
                     child: Text(
-                      "Nom complet",
+                      "Votre nom",
                       style: safeGoogleFont(
                         'Noto Sans',
                         fontSize: 14 * ffem,
@@ -237,10 +408,10 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                   ),
                   Container(
                     child: TextFormField(
-                      controller: nameController,
+                      controller: firstNameController,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return "Entrer votre mon complet";
+                          return "Entrer votre nom";
                         }
                         return null;
                       },
@@ -249,7 +420,50 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                             borderSide:
                                 BorderSide(width: 3, color: Color(0xffaeaeae)),
                             borderRadius: BorderRadius.circular(8)),
-                        hintText: "Entrez votre nom complet",
+                        hintText: "Entrez votre nom",
+                        hintStyle: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    child: Text(
+                      "Votre prenom",
+                      style: safeGoogleFont(
+                        'Noto Sans',
+                        fontSize: 14 * ffem,
+                        fontWeight: FontWeight.w500,
+                        height: 1.4285714286 * ffem / fem,
+                        letterSpacing: 0.0140000002 * fem,
+                        color: const Color(0xbf000000),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    child: TextFormField(
+                      controller: lastNameController,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Entrer votre premon";
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(width: 3, color: Color(0xffaeaeae)),
+                            borderRadius: BorderRadius.circular(8)),
+                        hintText: "Entrez votre prenom",
                         hintStyle: TextStyle(fontSize: 14),
                       ),
                     ),
@@ -350,6 +564,69 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                 children: [
                   Container(
                     child: Text(
+                      "Date de naissance",
+                      style: safeGoogleFont(
+                        'Noto Sans',
+                        fontSize: 14 * ffem,
+                        fontWeight: FontWeight.w500,
+                        height: 1.4285714286 * ffem / fem,
+                        letterSpacing: 0.0140000002 * fem,
+                        color: const Color(0xbf000000),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    child: TextFormField(
+                      controller: dateinput,
+                      readOnly: true,
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            locale: const Locale("fr", "FR"),
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(
+                                2000), //DateTime.now() - not to allow to choose before today.
+                            lastDate: DateTime(2101));
+
+                        if (pickedDate != null) {
+                          print(
+                              pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                          String formattedDate =
+                              DateFormat('dd-MM-yyyy').format(pickedDate);
+                          print(
+                              formattedDate); //formatted date output using intl package =>  2021-03-16
+                          //you can implement different kind of Date Format here according to your requirement
+
+                          setState(() {
+                            print(pickedDate.year);
+                            dateinput.text =
+                                formattedDate; //set output date to TextField value.
+                          });
+                        } else {
+                          print("Date is not selected");
+                        }
+                      },
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.calendar_today),
+                        border: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(width: 3, color: Color(0xffaeaeae)),
+                            borderRadius: BorderRadius.circular(8)),
+                        hintText: "Date de naissance",
+                        hintStyle: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    child: Text(
                       "Votre age",
                       style: safeGoogleFont(
                         'Noto Sans',
@@ -368,13 +645,7 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                     child: TextFormField(
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      // controller: phoneController,
-                      // validator: (value) {
-                      //   if (value!.isEmpty) {
-                      //     return "Entrez votre numéro de téléphone";
-                      //   }
-                      //   return null;
-                      // },
+                      controller: ageController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderSide:
@@ -471,7 +742,7 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                     child: TextFormField(
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      // controller: phoneController,
+                      controller: weekController,
                       // validator: (value) {
                       //   if (value!.isEmpty) {
                       //     return "Entrez votre numéro de téléphone";
@@ -587,8 +858,6 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    // hpital9z7 (289:539)
-
                     child: Text(
                       'Votre Origin',
                       style: safeGoogleFont(
@@ -864,6 +1133,10 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                     Container(
                       child: TextFormField(
                         controller: gestWithPreeController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: BorderSide(
@@ -899,6 +1172,10 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                     Container(
                       child: TextFormField(
                         controller: gestWithoutPreeController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: BorderSide(
@@ -917,7 +1194,7 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                   children: [
                     Container(
                       child: Text(
-                        "Durée entre les deux accouchements",
+                        "Durée entre les deux accouchements en semaines",
                         style: safeGoogleFont(
                           'Noto Sans',
                           fontSize: 14 * ffem,
@@ -934,13 +1211,16 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                     Container(
                       child: TextFormField(
                         controller: betweenPregController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: BorderSide(
                                   width: 3, color: Color(0xffaeaeae)),
                               borderRadius: BorderRadius.circular(8)),
-                          hintText:
-                              "Durée entre les deux accouchements en semaines",
+                          hintText: "Durée entre les deux accouchements",
                           hintStyle: TextStyle(fontSize: 14),
                         ),
                       ),

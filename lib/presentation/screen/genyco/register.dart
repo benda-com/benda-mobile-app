@@ -21,7 +21,8 @@ class _RegisterGenyco extends State<RegisterGenyco> {
   final _formfield = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passController = TextEditingController();
-  final nameController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
   final matriculeController = TextEditingController();
   final phoneController = TextEditingController();
   bool passToggle = true;
@@ -82,7 +83,7 @@ class _RegisterGenyco extends State<RegisterGenyco> {
                         children: [
                           Container(
                             child: Text(
-                              "Nom complet",
+                              "Votre nom",
                               style: safeGoogleFont(
                                 'Noto Sans',
                                 fontSize: 14 * ffem,
@@ -98,10 +99,10 @@ class _RegisterGenyco extends State<RegisterGenyco> {
                           ),
                           Container(
                             child: TextFormField(
-                              controller: nameController,
+                              controller: firstNameController,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return "Entrer votre mon complet";
+                                  return "Entrer votre mon";
                                 }
                                 return null;
                               },
@@ -110,7 +111,50 @@ class _RegisterGenyco extends State<RegisterGenyco> {
                                     borderSide: BorderSide(
                                         width: 3, color: Color(0xffaeaeae)),
                                     borderRadius: BorderRadius.circular(8)),
-                                hintText: "Entrez votre nom complet",
+                                hintText: "Entrez votre nom",
+                                hintStyle: TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            child: Text(
+                              "Prenom",
+                              style: safeGoogleFont(
+                                'Noto Sans',
+                                fontSize: 14 * ffem,
+                                fontWeight: FontWeight.w500,
+                                height: 1.4285714286 * ffem / fem,
+                                letterSpacing: 0.0140000002 * fem,
+                                color: const Color(0xbf000000),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            child: TextFormField(
+                              controller: lastNameController,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Entrer votre premon";
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 3, color: Color(0xffaeaeae)),
+                                    borderRadius: BorderRadius.circular(8)),
+                                hintText: "Entrez votre prenom",
                                 hintStyle: TextStyle(fontSize: 14),
                               ),
                             ),
@@ -219,8 +263,6 @@ class _RegisterGenyco extends State<RegisterGenyco> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            // hpital9z7 (289:539)
-
                             child: Text(
                               'Hôpital',
                               style: safeGoogleFont(
@@ -387,7 +429,6 @@ class _RegisterGenyco extends State<RegisterGenyco> {
                     );
                   }
                   return Container(
-                    // filledbuttonrxP (115:75)
                     margin:
                         EdgeInsets.fromLTRB(1 * fem, 0 * fem, 0 * fem, 0 * fem),
                     child: TextButton(
@@ -395,17 +436,13 @@ class _RegisterGenyco extends State<RegisterGenyco> {
                         if (_formfield.currentState!.validate()) {
                           if (emailController.text.isNotEmpty &&
                               passController.text.isNotEmpty &&
-                              nameController.text.isNotEmpty &&
+                              firstNameController.text.isNotEmpty &&
+                              lastNameController.text.isNotEmpty &&
                               phoneController.text.isNotEmpty &&
                               matriculeController.text.isNotEmpty) {
-                            var fullName =
-                                nameController.text.trim().split(' ');
-
-                            String firstName = fullName[0];
-                            String? lastName = fullName[1];
                             RegisterModel registerModel = RegisterModel(
-                                firstName: firstName,
-                                lastName: lastName,
+                                firstName: firstNameController.text.trim(),
+                                lastName: lastNameController.text.trim(),
                                 email: emailController.text.trim(),
                                 dateOfBirth: "2023-09-23",
                                 phoneNumber: phoneController.text.trim(),

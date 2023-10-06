@@ -1,5 +1,6 @@
 import 'package:benda/logic/auth/auth_cubit.dart';
 import 'package:benda/presentation/screen/genyco/home/home.dart';
+import 'package:benda/presentation/screen/pregnant/home_layout.dart';
 import 'package:benda/presentation/screen/register.dart';
 import 'package:benda/utils.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class _LoginState extends State<Login> {
   final _formfield = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passController = TextEditingController();
-  bool isCorrectCredentials = false;
+  bool _isCorrectCredentials = true;
   bool passToggle = true;
 
   bool isValidEmail(String em) {
@@ -28,9 +29,40 @@ class _LoginState extends State<Login> {
     return regExp.hasMatch(em);
   }
 
+  bool _submitted = false;
+
+  String? get _errorTextEmail {
+    final text = emailController.value.text;
+
+    if (text.isEmpty) {
+      return 'Ce champ est obligatiore';
+    }
+    if (!isValidEmail(text)) {
+      return 'Renseigner une adresse email valide';
+    }
+
+    return null;
+  }
+
+  String? get _errorTextPassword {
+    final text = passController.value.text;
+
+    if (text.isEmpty) {
+      return 'Ce champ est obligatiore';
+    }
+    return null;
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passController.dispose();
+    super.dispose();
+  }
+
   void showErrorCredentials() {
     setState(() {
-      isCorrectCredentials = true;
+      _isCorrectCredentials = true;
     });
   }
 
@@ -47,8 +79,6 @@ class _LoginState extends State<Login> {
             width: double.infinity,
             height: MediaQuery.of(context).size.height,
             child: Container(
-              // iphone13promax17LiK (289:517)
-
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 40),
                 width: double.infinity,
@@ -60,7 +90,6 @@ class _LoginState extends State<Login> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      // fichier1125M (I289:524;35:721)
                       margin: EdgeInsets.fromLTRB(
                           19 * fem, 0 * fem, 0 * fem, 40.55 * fem),
                       width: 88 * fem,
@@ -77,19 +106,18 @@ class _LoginState extends State<Login> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Visibility(
-                                  visible: isCorrectCredentials,
-                                  child: Text(
-                                    "Email ou mot de passe incorrect",
-                                    style: safeGoogleFont(
-                                      'Noto Sans',
-                                      fontSize: 14 * ffem,
-                                      fontWeight: FontWeight.w500,
-                                      height: 1.4285714286 * ffem / fem,
-                                      letterSpacing: 0.0140000002 * fem,
-                                      color: Color.fromARGB(190, 255, 0, 0),
-                                    ),
-                                  )),
+                              if (!_isCorrectCredentials)
+                                Text(
+                                  "Email ou mot de passe incorrect",
+                                  style: safeGoogleFont(
+                                    'Noto Sans',
+                                    fontSize: 14 * ffem,
+                                    fontWeight: FontWeight.w500,
+                                    height: 1.4285714286 * ffem / fem,
+                                    letterSpacing: 0.0140000002 * fem,
+                                    color: Color.fromARGB(190, 255, 0, 0),
+                                  ),
+                                ),
                               SizedBox(
                                 height: 20,
                               ),
@@ -112,17 +140,7 @@ class _LoginState extends State<Login> {
                               SizedBox(
                                 child: TextFormField(
                                   controller: emailController,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return "Entrer une adresse email";
-                                    }
-
-                                    if (!isValidEmail(value.toString())) {
-                                      return "Entrer une addresse email valide";
-                                    }
-
-                                    return null;
-                                  },
+                                  onChanged: (_) => setState(() {}),
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -130,6 +148,8 @@ class _LoginState extends State<Login> {
                                         borderRadius: BorderRadius.circular(8)),
                                     hintText: "Adresse email",
                                     prefixIcon: Icon(Icons.email),
+                                    errorText:
+                                        _submitted ? _errorTextEmail : null,
                                     hintStyle: TextStyle(fontSize: 14),
                                   ),
                                 ),
@@ -162,13 +182,7 @@ class _LoginState extends State<Login> {
                                 child: TextFormField(
                                   obscureText: passToggle,
                                   controller: passController,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return "Entrer votre mot de passe";
-                                    }
-
-                                    return null;
-                                  },
+                                  onChanged: (_) => setState(() {}),
                                   decoration: InputDecoration(
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide(
@@ -178,6 +192,9 @@ class _LoginState extends State<Login> {
                                               BorderRadius.circular(8)),
                                       hintText: "Votre mot de passe",
                                       prefixIcon: Icon(Icons.lock),
+                                      errorText: _submitted
+                                          ? _errorTextPassword
+                                          : null,
                                       hintStyle: TextStyle(fontSize: 14),
                                       suffixIcon: InkWell(
                                         onTap: () {
@@ -201,28 +218,38 @@ class _LoginState extends State<Login> {
                     ),
                     BlocConsumer<AuthCubit, AuthState>(
                       listener: (context, state) {
-                        if (state is AuthFailed) {
-                          showErrorCredentials();
-                        }
                         if (state is LoginCompleted) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (BuildContext context) {
-                                return const HomeGenyco();
-                              },
-                            ),
-                          );
+                          if (state.is_gynecologist == true) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) {
+                                  return const HomeGenyco();
+                                },
+                              ),
+                            );
+                          } else {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) {
+                                  return const HomeLayout();
+                                },
+                              ),
+                            );
+                          }
                         }
                       },
                       builder: (context, state) {
+                        if (state is AuthFailed) {
+                          setState(() {
+                            _isCorrectCredentials = false;
+                          });
+                        }
                         if (state is AuthLoading) {
                           return const CircularProgressIndicator(
                             color: Colors.blue,
                           );
                         }
                         return Container(
-                          // filledbutton55Z (289:525)
-
                           width: double.infinity,
                           height: 50 * fem,
                           decoration: BoxDecoration(
@@ -232,8 +259,11 @@ class _LoginState extends State<Login> {
                           child: Center(
                             child: TextButton(
                               onPressed: () {
-                                if (emailController.text.isNotEmpty &&
-                                    passController.text.isNotEmpty) {
+                                setState(() {
+                                  _submitted = true;
+                                });
+                                if (_errorTextEmail == null &&
+                                    _errorTextPassword == null) {
                                   authCubit.login(emailController.text.trim(),
                                       passController.text.trim());
                                 }
