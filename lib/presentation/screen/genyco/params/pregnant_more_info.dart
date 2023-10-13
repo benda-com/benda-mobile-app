@@ -113,7 +113,6 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
-                                // frame97q11 (254:511)
                                 padding: EdgeInsets.fromLTRB(
                                     0 * fem, 10 * fem, 0 * fem, 10 * fem),
                                 width: double.infinity,
@@ -124,7 +123,31 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                                           width: 0.5)),
                                 ),
                                 child: Text(
-                                  'Nom complet:    Ivanna KITIO ',
+                                  'Nom: KITIO ',
+                                  style: safeGoogleFont(
+                                    'Roboto',
+                                    fontSize: 15 * ffem,
+                                    fontWeight: FontWeight.w400,
+                                    height: 1.3333333333 * ffem / fem,
+                                    color: Color(0xff5c5a5a),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 30 * fem,
+                              ),
+                              Container(
+                                padding: EdgeInsets.fromLTRB(
+                                    0 * fem, 10 * fem, 0 * fem, 10 * fem),
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          color: Color(0xffd9d9d9),
+                                          width: 0.5)),
+                                ),
+                                child: Text(
+                                  'Prenom: Ivanna',
                                   style: safeGoogleFont(
                                     'Roboto',
                                     fontSize: 15 * ffem,
@@ -156,8 +179,8 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                               InfoItemWidget(
                                   fem: fem,
                                   ffem: ffem,
-                                  textName: 'Age',
-                                  textValue: '24 ans'),
+                                  textName: 'Date de naissance',
+                                  textValue: '24-12-2007'),
                             ],
                           ),
                         ),
@@ -236,8 +259,8 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                         InfoItemWidget(
                             fem: fem,
                             ffem: ffem,
-                            textName: 'Début de grossesses',
-                            textValue: '24 - 12 - 2023 '),
+                            textName: 'Semaine de grossesse',
+                            textValue: '24'),
                         SizedBox(
                           height: 17 * fem,
                         ),
@@ -297,19 +320,6 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                         SizedBox(
                           height: 17 * fem,
                         ),
-                        InfoItemWidget(
-                            fem: fem,
-                            ffem: ffem,
-                            textName: 'Conception in vitro',
-                            textValue: 'Oui'),
-                        SizedBox(
-                          height: 17 * fem,
-                        ),
-                        InfoItemWidget(
-                            fem: fem,
-                            ffem: ffem,
-                            textName: 'Votre origin',
-                            textValue: 'Africain'),
                       ],
                     ),
                   ),
@@ -393,15 +403,7 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                               InfoItemWidget(
                                   fem: fem,
                                   ffem: ffem,
-                                  textName: 'Hypertension',
-                                  textValue: 'Non'),
-                              SizedBox(
-                                height: 17 * fem,
-                              ),
-                              InfoItemWidget(
-                                  fem: fem,
-                                  ffem: ffem,
-                                  textName: 'Diabète',
+                                  textName: 'Conception in vitro',
                                   textValue: 'Oui'),
                               SizedBox(
                                 height: 17 * fem,
@@ -409,7 +411,28 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                               InfoItemWidget(
                                   fem: fem,
                                   ffem: ffem,
-                                  textName: 'Prééclampsie',
+                                  textName: 'Syndrome antiphospholipide',
+                                  textValue: 'Non'),
+                              InfoItemWidget(
+                                  fem: fem,
+                                  ffem: ffem,
+                                  textName: 'Prééclampsie dans la famille',
+                                  textValue: 'Non'),
+                              SizedBox(
+                                height: 17 * fem,
+                              ),
+                              InfoItemWidget(
+                                  fem: fem,
+                                  ffem: ffem,
+                                  textName: 'Hypertension chronique',
+                                  textValue: 'Oui'),
+                              SizedBox(
+                                height: 17 * fem,
+                              ),
+                              InfoItemWidget(
+                                  fem: fem,
+                                  ffem: ffem,
+                                  textName: 'Diabète sucré',
                                   textValue: 'Non'),
                             ],
                           ),

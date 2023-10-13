@@ -1,4 +1,4 @@
-import 'package:benda/presentation/screen/pregnant/home_layout.dart';
+import 'package:benda/presentation/screen/pregnant/chooce_gyneco.dart';
 import 'package:benda/presentation/widgets/form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:benda/utils.dart';
@@ -47,7 +47,7 @@ class VerifyDevice extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) {
-                    return HomeLayout();
+                    return ChooseGyneco();
                   },
                 ));
               },

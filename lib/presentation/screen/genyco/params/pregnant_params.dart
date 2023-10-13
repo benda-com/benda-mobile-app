@@ -5,21 +5,36 @@ import 'package:flutter/material.dart';
 import 'package:benda/presentation/widgets/filter_parameter.dart';
 
 class PregnantParams extends StatefulWidget {
-  const PregnantParams({super.key});
+  const PregnantParams(
+      {super.key, required this.name, required this.age, required this.week});
+
+  final String name;
+  final int age;
+  final String? week;
 
   @override
-  State<PregnantParams> createState() => _PregnantParamsState();
+  State<PregnantParams> createState() =>
+      _PregnantParamsState(age: age, name: name, week: week);
 }
 
 class _PregnantParamsState extends State<PregnantParams> {
   bool _isVisible = false;
   int selectedIndex = 0;
+  final String name;
+  final int age;
+  final String? week;
+
+  _PregnantParamsState({
+    required this.name,
+    required this.age,
+    required this.week,
+  });
   List<String> labels = ["Proteine", "TA", "Freq.Card", "Temp"];
   List<String> compLabels = [
-    "Proteine",
+    "Protéinurie",
     "Tension Arterielle",
     "Frequence Cardiaque",
-    "Temperature"
+    "Temperature",
   ];
 
   void showPrediction() {
@@ -66,7 +81,7 @@ class _PregnantParamsState extends State<PregnantParams> {
                               children: [
                                 Text(
                                   // vivianefokounSB (163:287)
-                                  'Viviane FOKOU',
+                                  name,
                                   style: safeGoogleFont(
                                     'Roboto',
                                     fontSize: 16 * ffem,
@@ -77,7 +92,7 @@ class _PregnantParamsState extends State<PregnantParams> {
                                 ),
                                 Text(
                                   // ansvYP (186:509)
-                                  '24 ans',
+                                  '$age ans',
                                   style: safeGoogleFont(
                                     'Roboto',
                                     fontSize: 14 * ffem,
@@ -89,17 +104,18 @@ class _PregnantParamsState extends State<PregnantParams> {
                               ],
                             ),
                           ),
-                          Text(
-                            // semainesGcF (186:505)
-                            '24 semaines',
-                            style: safeGoogleFont(
-                              'Roboto',
-                              fontSize: 16 * ffem,
-                              fontWeight: FontWeight.w400,
-                              height: 1.5 * ffem / fem,
-                              color: Color(0xff5c5a5a),
+                          if (week != "null")
+                            Text(
+                              // semainesGcF (186:505)
+                              '$week semaines',
+                              style: safeGoogleFont(
+                                'Roboto',
+                                fontSize: 16 * ffem,
+                                fontWeight: FontWeight.w400,
+                                height: 1.5 * ffem / fem,
+                                color: Color(0xff5c5a5a),
+                              ),
                             ),
-                          ),
                         ],
                       ),
                     ),
@@ -184,6 +200,21 @@ class _PregnantParamsState extends State<PregnantParams> {
                       ),
                     ],
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ParameterCardWidget(
+                        fem: fem,
+                        ffem: ffem,
+                        paramName: "Satu. Oxy.",
+                        paramTime: "12h00",
+                        paramUnit: "%",
+                        status: "Normal",
+                        paramValue: 100,
+                      ),
+                    ],
+                  ),
                   SizedBox(
                     height: 20,
                   ),
@@ -203,7 +234,7 @@ class _PregnantParamsState extends State<PregnantParams> {
                           margin: EdgeInsets.fromLTRB(
                               0 * fem, 0 * fem, 70 * fem, 0 * fem),
                           child: Text(
-                            'Appeler madame FOKOU',
+                            'Appeler madame $name',
                             textAlign: TextAlign.center,
                             style: safeGoogleFont(
                               'Roboto',

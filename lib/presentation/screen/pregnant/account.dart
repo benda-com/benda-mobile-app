@@ -1,6 +1,6 @@
 import 'package:benda/presentation/screen/genyco/changePwd.dart';
 import 'package:benda/presentation/screen/genyco/editProfil.dart';
-import 'package:benda/presentation/screen/genyco/personalInfo.dart';
+import 'package:benda/presentation/screen/pregnant/personalInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:benda/utils.dart';
 
@@ -72,7 +72,7 @@ class Account extends StatelessWidget {
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) {
-                                return PersonalInfo();
+                                return PregnantInfo();
                               },
                             ));
                           },

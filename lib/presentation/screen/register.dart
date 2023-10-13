@@ -84,10 +84,8 @@ class _RegisterState extends State<Register> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          // buttonqYs (I115:21;30:658)
                           margin: EdgeInsets.fromLTRB(
                               0 * fem, 0 * fem, 60 * fem, 0 * fem),
-
                           child: Text(
                             "Gynecologue",
                             style: safeGoogleFont(
@@ -113,32 +111,25 @@ class _RegisterState extends State<Register> {
                 ),
                 child: Container(
                   padding: EdgeInsets.fromLTRB(
-                      80.5 * fem, 15 * fem, 38 * fem, 15 * fem),
+                      40 * fem, 15 * fem, 38 * fem, 15 * fem),
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: Color(0xa30072c5),
                     borderRadius: BorderRadius.circular(8 * fem),
                   ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        // buttonBm9 (I115:23;30:658)
-
-                        child: Text(
-                          'Femme en enceinte',
-                          style: safeGoogleFont(
-                            'Noto Sans',
-                            fontSize: 14 * ffem,
-                            fontWeight: FontWeight.w500,
-                            height: 1.4285714286 * ffem / fem,
-                            letterSpacing: 0.0140000002 * fem,
-                            color: Color(0xffffffff),
-                          ),
-                        ),
+                  child: Center(
+                    child: Text(
+                      'Femme en enceinte',
+                      textAlign: TextAlign.center,
+                      style: safeGoogleFont(
+                        'Noto Sans',
+                        fontSize: 14 * ffem,
+                        fontWeight: FontWeight.w500,
+                        height: 1.4285714286 * ffem / fem,
+                        letterSpacing: 0.0140000002 * fem,
+                        color: Color(0xffffffff),
                       ),
-                    ],
+                    ),
                   ),
                 ),
                 onPressed: () {

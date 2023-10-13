@@ -4,29 +4,30 @@ import 'package:benda/presentation/screen/genyco/params/pregnant_params.dart';
 import 'package:flutter/material.dart';
 
 class PregnantDetails extends StatefulWidget {
-  const PregnantDetails({
-    super.key,
-    // required this.pregnantName,
-    // required this.nberOfWeek,
-    // required this.age
-  });
+  const PregnantDetails(
+      {super.key, required this.name, required this.age, required this.week});
 
-  // final String pregnantName;
-  // final int nberOfWeek;
-  // final int age;
+  final String name;
+  final int age;
+  final String? week;
 
   @override
-  State<PregnantDetails> createState() => _PregnantDetails();
+  State<PregnantDetails> createState() =>
+      _PregnantDetails(age: age, name: name, week: week);
 }
 
 class _PregnantDetails extends State<PregnantDetails> {
   int _selectedIndex = 1;
-  static final List<Widget> _widgetOptions = <Widget>[
-    const History(),
-    const PregnantParams(),
-    const PregnantMoreInfo(),
-  ];
 
+  final String name;
+  final int age;
+  final String? week;
+
+  _PregnantDetails({
+    required this.name,
+    required this.age,
+    required this.week,
+  });
   void __onItemtapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -35,6 +36,11 @@ class _PregnantDetails extends State<PregnantDetails> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> _widgetOptions = <Widget>[
+      const History(),
+      PregnantParams(age: age, name: name, week: week),
+      const PregnantMoreInfo(),
+    ];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xfff8f9f9),

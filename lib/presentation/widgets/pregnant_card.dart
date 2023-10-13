@@ -19,7 +19,7 @@ class PregnantCard extends StatelessWidget {
   final String name;
   final Color colorstatus;
   final int age;
-  final int week;
+  final String? week;
   final String womenimage;
   final String status;
 
@@ -33,16 +33,23 @@ class PregnantCard extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (BuildContext context) {
-            return const PregnantDetails();
-          }));
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (BuildContext context) {
+              return PregnantDetails(
+                age: age,
+                name: name,
+                week: week,
+              );
+            }),
+          );
         },
         child: ListTile(
           contentPadding: EdgeInsets.all(10),
           tileColor: Colors.white,
           leading: CircleAvatar(
-            foregroundImage: AssetImage("images/${womenimage}"),
+            backgroundColor: Color.fromARGB(255, 186, 185, 185),
+            backgroundImage: AssetImage(
+                "images/${womenimage == "" ? "uppericons.png" : womenimage}"),
           ),
           title: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -61,17 +68,17 @@ class PregnantCard extends StatelessWidget {
               SizedBox(
                 height: 2 * fem,
               ),
-              Text(
-                // semainesTTM (149:189)
-                '${week} semaines',
-                style: safeGoogleFont(
-                  'Inter',
-                  fontSize: 13 * ffem,
-                  fontWeight: FontWeight.w400,
-                  height: 1.2125 * ffem / fem,
-                  color: Color(0xff5c5a5a),
+              if (week != "null")
+                Text(
+                  '${week} semaines',
+                  style: safeGoogleFont(
+                    'Inter',
+                    fontSize: 13 * ffem,
+                    fontWeight: FontWeight.w400,
+                    height: 1.2125 * ffem / fem,
+                    color: Color(0xff5c5a5a),
+                  ),
                 ),
-              ),
               SizedBox(
                 height: 2 * fem,
               ),

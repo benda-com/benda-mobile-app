@@ -2,7 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:benda/utils.dart';
 
 class GenycoInfo extends StatelessWidget {
-  const GenycoInfo({super.key});
+  final String gynecoFirstName;
+  final String gynecoLastName;
+  final String gynecoMatricule;
+  final String gynecoHospital;
+
+  const GenycoInfo(
+      {super.key,
+      required this.gynecoFirstName,
+      required this.gynecoLastName,
+      required this.gynecoMatricule,
+      required this.gynecoHospital});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +34,8 @@ class GenycoInfo extends StatelessWidget {
                     borderRadius: BorderRadius.circular(6),
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     child: Image.asset(
-                      "images/ellipse-15-bg.png",
+                      "images/uppericons.png",
+                      color: Color.fromARGB(91, 0, 0, 0),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -35,7 +46,7 @@ class GenycoInfo extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        "Dr Calvin K.",
+                        "Dr ${gynecoFirstName} ${gynecoLastName}",
                         style: safeGoogleFont(
                           'Inter',
                           fontSize: 20 * ffem,
@@ -54,15 +65,6 @@ class GenycoInfo extends StatelessWidget {
                       SizedBox(
                         height: 20,
                       ),
-                      Text(
-                        "Faire Naitre est ma passion",
-                        textAlign: TextAlign.center,
-                        style: safeGoogleFont('Inter',
-                            fontSize: 16 * ffem,
-                            fontWeight: FontWeight.w400,
-                            height: 1.2125 * ffem / fem,
-                            color: const Color.fromARGB(221, 104, 104, 104)),
-                      )
                     ],
                   ),
                 ),
@@ -84,35 +86,7 @@ class GenycoInfo extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "5588621155",
-                  style: safeGoogleFont('Inter',
-                      fontSize: 20 * ffem,
-                      fontWeight: FontWeight.w400,
-                      height: 1.2125 * ffem / fem,
-                      color: const Color.fromARGB(221, 104, 104, 104)),
-                )
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: 100,
-                  child: Text(
-                    "Ville de Résidence:",
-                    style: safeGoogleFont(
-                      'Inter',
-                      fontSize: 18 * ffem,
-                      fontWeight: FontWeight.w500,
-                      height: 1.2125 * ffem / fem,
-                    ),
-                  ),
-                ),
-                Text(
-                  "Douala",
+                  "${gynecoMatricule}",
                   style: safeGoogleFont('Inter',
                       fontSize: 20 * ffem,
                       fontWeight: FontWeight.w400,
@@ -139,7 +113,7 @@ class GenycoInfo extends StatelessWidget {
                 Container(
                   width: 100,
                   child: Text(
-                    "Hôpital Laquintini de Douala",
+                    "${gynecoHospital}",
                     style: safeGoogleFont('Inter',
                         fontSize: 20 * ffem,
                         fontWeight: FontWeight.w400,
@@ -150,34 +124,6 @@ class GenycoInfo extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: 100,
-                  child: Text(
-                    "Nombre de patients suivis:",
-                    style: safeGoogleFont(
-                      'Inter',
-                      fontSize: 18 * ffem,
-                      fontWeight: FontWeight.w500,
-                      height: 1.2125 * ffem / fem,
-                    ),
-                  ),
-                ),
-                Text(
-                  "10",
-                  style: safeGoogleFont('Inter',
-                      fontSize: 20 * ffem,
-                      fontWeight: FontWeight.w400,
-                      height: 1.2125 * ffem / fem,
-                      color: const Color.fromARGB(221, 104, 104, 104)),
-                )
-              ],
-            ),
-          )
         ],
       ),
     );

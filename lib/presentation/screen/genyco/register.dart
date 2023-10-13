@@ -6,6 +6,7 @@ import 'package:benda/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class RegisterGenyco extends StatefulWidget {
   @override
@@ -25,6 +26,7 @@ class _RegisterGenyco extends State<RegisterGenyco> {
   final lastNameController = TextEditingController();
   final matriculeController = TextEditingController();
   final phoneController = TextEditingController();
+  TextEditingController dateinput = TextEditingController();
   bool passToggle = true;
 
   bool isValidEmail(String em) {
@@ -34,6 +36,12 @@ class _RegisterGenyco extends State<RegisterGenyco> {
     RegExp regExp = new RegExp(p);
 
     return regExp.hasMatch(em);
+  }
+
+  @override
+  void initState() {
+    dateinput.text = "";
+    super.initState();
   }
 
   final _hospitalList = [
@@ -83,7 +91,7 @@ class _RegisterGenyco extends State<RegisterGenyco> {
                         children: [
                           Container(
                             child: Text(
-                              "Votre nom",
+                              "Nom",
                               style: safeGoogleFont(
                                 'Noto Sans',
                                 fontSize: 14 * ffem,
@@ -169,7 +177,7 @@ class _RegisterGenyco extends State<RegisterGenyco> {
                         children: [
                           Container(
                             child: Text(
-                              "Adresse email",
+                              "Email",
                               style: safeGoogleFont(
                                 'Noto Sans',
                                 fontSize: 14 * ffem,
@@ -216,7 +224,75 @@ class _RegisterGenyco extends State<RegisterGenyco> {
                         children: [
                           Container(
                             child: Text(
-                              "Numéro de téléphone",
+                              "Date de naissance",
+                              style: safeGoogleFont(
+                                'Noto Sans',
+                                fontSize: 14 * ffem,
+                                fontWeight: FontWeight.w500,
+                                height: 1.4285714286 * ffem / fem,
+                                letterSpacing: 0.0140000002 * fem,
+                                color: const Color(0xbf000000),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            child: TextFormField(
+                              controller: dateinput,
+                              readOnly: true,
+                              onTap: () async {
+                                int firstPermitDate = DateTime.now().year - 15;
+                                int lastPermitDate = DateTime.now().year - 50;
+                                DateTime? pickedDate = await showDatePicker(
+                                    context: context,
+                                    locale: const Locale("fr", "FR"),
+                                    initialDate: DateTime(firstPermitDate - 1),
+                                    firstDate: DateTime(
+                                        lastPermitDate), //DateTime.now() - not to allow to choose before today.
+                                    lastDate: DateTime(firstPermitDate));
+
+                                if (pickedDate != null) {
+                                  print(
+                                      pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                                  String formattedDate =
+                                      DateFormat('dd-MM-yyyy')
+                                          .format(pickedDate);
+                                  print(
+                                      formattedDate); //formatted date output using intl package =>  2021-03-16
+                                  //you can implement different kind of Date Format here according to your requirement
+
+                                  setState(() {
+                                    dateinput.text = formattedDate;
+                                    //set output date to TextField value.
+                                  });
+                                } else {
+                                  print("Date is not selected");
+                                }
+                              },
+                              decoration: InputDecoration(
+                                icon: Icon(Icons.calendar_today),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 3, color: Color(0xffaeaeae)),
+                                    borderRadius: BorderRadius.circular(8)),
+                                hintText: "Date de naissance",
+                                hintStyle: TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            child: Text(
+                              "Téléphone",
                               style: safeGoogleFont(
                                 'Noto Sans',
                                 fontSize: 14 * ffem,
@@ -318,7 +394,7 @@ class _RegisterGenyco extends State<RegisterGenyco> {
                         children: [
                           Container(
                             child: Text(
-                              "Votre Matricule",
+                              "Matricule",
                               style: safeGoogleFont(
                                 'Noto Sans',
                                 fontSize: 14 * ffem,
@@ -403,7 +479,7 @@ class _RegisterGenyco extends State<RegisterGenyco> {
                                         : Icons.visibility_off),
                                   )),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ],
@@ -413,7 +489,9 @@ class _RegisterGenyco extends State<RegisterGenyco> {
                   height: 20,
                 ),
                 BlocConsumer<AuthCubit, AuthState>(listener: (context, state) {
-                  if (state is RegisterCompleted) {
+                  print(state);
+                  if (state is RegisterCompleted &&
+                      state.registerResponse?.isGynecologist == true) {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (BuildContext context) {
@@ -433,6 +511,11 @@ class _RegisterGenyco extends State<RegisterGenyco> {
                         EdgeInsets.fromLTRB(1 * fem, 0 * fem, 0 * fem, 0 * fem),
                     child: TextButton(
                       onPressed: () {
+                        List<String> bornDateArray = dateinput.text.split("-");
+                        String year = bornDateArray[2];
+                        String month = bornDateArray[1];
+                        String day = bornDateArray[0];
+                        String bornDate = "$year-$month-$day";
                         if (_formfield.currentState!.validate()) {
                           if (emailController.text.isNotEmpty &&
                               passController.text.isNotEmpty &&
@@ -444,11 +527,13 @@ class _RegisterGenyco extends State<RegisterGenyco> {
                                 firstName: firstNameController.text.trim(),
                                 lastName: lastNameController.text.trim(),
                                 email: emailController.text.trim(),
-                                dateOfBirth: "2023-09-23",
+                                dateOfBirth: bornDate,
                                 phoneNumber: phoneController.text.trim(),
                                 password: passController.text.trim(),
                                 isGynecologist: true,
-                                isPregnantWoman: false);
+                                isPregnantWoman: false,
+                                hospital: _selectedVal,
+                                licenseNumber: matriculeController.text.trim());
                             authCubit.register(registerModel);
                           }
                         }

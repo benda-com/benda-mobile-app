@@ -1,4 +1,5 @@
 import 'package:benda/data/model/register_model.dart';
+import 'package:benda/data/model/response/login_response.dart';
 import 'package:benda/data/model/response/register_response.dart';
 import 'package:benda/data/model/response/response_model.dart';
 import 'package:benda/data/repositories/auth_repository.dart';
@@ -34,14 +35,13 @@ class AuthCubit extends Cubit<AuthState> {
     Response response = await authRepo.login(email: email, password: password);
     ResponseModel responseModel;
     if (response.statusCode == 200) {
-      emit(LoginCompleted(response.data["token"],
-          response.data["is_gynecologist"], response.data['id']));
+      emit(LoginCompleted(LoginResponse.fromJson(response.data)));
       debugPrint(response.data["token"]);
       responseModel =
           ResponseModel(isSuccess: true, message: "Login completed!");
     } else {
       emit(AuthInitial());
-      //emit(AuthFailed(response.statusMessage!));
+      emit(AuthFailed(response.statusMessage!));
       debugPrint(response.statusMessage!);
       responseModel =
           ResponseModel(isSuccess: false, message: response.statusMessage!);

@@ -2,14 +2,14 @@ import 'package:benda/presentation/widgets/notification_card.dart';
 import 'package:flutter/material.dart';
 import 'package:benda/utils.dart';
 
-class NotificationPregnant extends StatefulWidget {
-  const NotificationPregnant({super.key});
+class NotificationGyneco extends StatefulWidget {
+  const NotificationGyneco({super.key});
 
   @override
-  State<NotificationPregnant> createState() => _NotificationPregnantState();
+  State<NotificationGyneco> createState() => _NotificationGynecoState();
 }
 
-class _NotificationPregnantState extends State<NotificationPregnant> {
+class _NotificationGynecoState extends State<NotificationGyneco> {
   @override
   Widget build(BuildContext context) {
     double baseWidth = 428;
@@ -56,15 +56,9 @@ class _NotificationPregnantState extends State<NotificationPregnant> {
                     NotificationCard(
                         fem: fem,
                         ffem: ffem,
-                        name: 'Feedback demande',
+                        name: 'Une nouvelle demande de suivi',
                         genycoimage: "fichier-1-1.png",
-                        hospitalName: "Votre demande a ete bien approuve"),
-                    NotificationCard(
-                        fem: fem,
-                        ffem: ffem,
-                        name: 'Conseille santé',
-                        genycoimage: "ellipse-15-bg.png",
-                        hospitalName: "Evitez de dormir sans caleçon"),
+                        hospitalName: "Anne Sonia souhaite que vous la suivez"),
                   ],
                 ),
               )

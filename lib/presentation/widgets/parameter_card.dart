@@ -32,8 +32,6 @@ class ParameterCardWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            // frame53hHh (186:140)
-
             padding: EdgeInsets.fromLTRB(10 * fem, 4 * fem, 4 * fem, 4 * fem),
             height: double.infinity,
             decoration: BoxDecoration(
@@ -53,14 +51,12 @@ class ParameterCardWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  // frame52xjR (186:139)
                   margin:
                       EdgeInsets.fromLTRB(0 * fem, 0 * fem, 48 * fem, 13 * fem),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        // protinurie6Kq (186:124)
                         margin: EdgeInsets.fromLTRB(
                             0 * fem, 0 * fem, 0 * fem, 5 * fem),
                         child: Text(
@@ -75,7 +71,6 @@ class ParameterCardWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        // mgBs5 (186:129)
                         '$paramValue $paramUnit',
                         style: safeGoogleFont(
                           'Roboto',
@@ -89,14 +84,12 @@ class ParameterCardWidget extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  // frame51KiP (186:138)
                   width: 27 * fem,
                   height: double.infinity,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        // frame48TJo (186:133)
                         margin: EdgeInsets.fromLTRB(
                             0 * fem, 0 * fem, 0 * fem, 36 * fem),
                         width: double.infinity,
@@ -121,7 +114,6 @@ class ParameterCardWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        // h00XZZ (186:128)
                         '12h00',
                         style: safeGoogleFont(
                           'Roboto',

@@ -1,42 +1,42 @@
 import 'dart:convert';
 
-RegisterResponse registerResponseFromJson(String str) =>
-    RegisterResponse.fromJson(json.decode(str));
+PatientResponse patientResponseFromJson(String str) =>
+    PatientResponse.fromJson(json.decode(str));
 
-String registerResponseToJson(RegisterResponse data) =>
+String patientResponseToJson(PatientResponse data) =>
     json.encode(data.toJson());
 
-class RegisterResponse {
-  int id;
-  String firstName;
-  String lastName;
-  String email;
-  DateTime dateOfBirth;
-  String phoneNumber;
-  bool isGynecologist;
-  bool isPregnantWoman;
+class PatientResponse {
+  int? id;
+  String? firstName;
+  String? lastName;
+  String? email;
+  DateTime? dateOfBirth;
+  String? phoneNumber;
+  bool? isGynecologist;
+  bool? isPregnantWoman;
   int? pregnantWomanPrenancyWeek;
   String? hospital;
   int? followId;
   String? licenseNumber;
 
-  RegisterResponse({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    required this.dateOfBirth,
-    required this.phoneNumber,
-    required this.isGynecologist,
-    required this.isPregnantWoman,
-    required this.pregnantWomanPrenancyWeek,
-    required this.hospital,
-    required this.followId,
-    required this.licenseNumber,
+  PatientResponse({
+    this.id,
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.dateOfBirth,
+    this.phoneNumber,
+    this.isGynecologist,
+    this.isPregnantWoman,
+    this.pregnantWomanPrenancyWeek,
+    this.hospital,
+    this.followId,
+    this.licenseNumber,
   });
 
-  factory RegisterResponse.fromJson(Map<String, dynamic> json) =>
-      RegisterResponse(
+  factory PatientResponse.fromJson(Map<String, dynamic> json) =>
+      PatientResponse(
         id: json["id"],
         firstName: json["first_name"],
         lastName: json["last_name"],
@@ -57,7 +57,7 @@ class RegisterResponse {
         "last_name": lastName,
         "email": email,
         "date_of_birth":
-            "${dateOfBirth.year.toString().padLeft(4, '0')}-${dateOfBirth.month.toString().padLeft(2, '0')}-${dateOfBirth.day.toString().padLeft(2, '0')}",
+            "${dateOfBirth?.year.toString().padLeft(4, '0')}-${dateOfBirth?.month.toString().padLeft(2, '0')}-${dateOfBirth?.day.toString().padLeft(2, '0')}",
         "phone_number": phoneNumber,
         "is_gynecologist": isGynecologist,
         "is_pregnant_woman": isPregnantWoman,

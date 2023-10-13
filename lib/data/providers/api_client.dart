@@ -88,6 +88,25 @@ class ApiClient {
     }
   }
 
+  Future<Response> patchData(String uri, dynamic body,
+      {Map<String, String>? headers}) async {
+    try {
+      debugPrint('====> API Call: $uri\nHeader: $_mainHeaders');
+      debugPrint('====> API Body: $body');
+      Http.Response _response = await Http.patch(
+        Uri.parse(appBaseUrl + uri),
+        body: jsonEncode(body),
+        headers: headers ?? _mainHeaders,
+      ).timeout(const Duration(seconds: 60));
+      return handleResponse(_response, uri);
+    } catch (e) {
+      return Response(
+          requestOptions: RequestOptions(path: ''),
+          statusCode: 1,
+          statusMessage: 'Connection to API failed');
+    }
+  }
+
   Future<Response> deleteData(String uri,
       {Map<String, String>? headers}) async {
     try {

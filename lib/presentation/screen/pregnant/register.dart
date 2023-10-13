@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:benda/data/model/register_model.dart';
 import 'package:benda/data/model/wright_parameters_model.dart';
 import 'package:benda/logic/auth/auth_cubit.dart';
@@ -29,7 +27,6 @@ class _RegisterPregnant extends State<RegisterPregnant> {
   final gestWithPreeController = TextEditingController();
   final gestWithoutPreeController = TextEditingController();
   final betweenPregController = TextEditingController();
-  final ageController = TextEditingController();
   final weekController = TextEditingController();
   TextEditingController dateinput = TextEditingController();
 
@@ -43,9 +40,8 @@ class _RegisterPregnant extends State<RegisterPregnant> {
   String? _choiceDia = "non";
 
   final _originList = [
-    "Africain",
-    "Sud-Asiatique",
-    "Autre",
+    "Afrique",
+    "Sud-Asie",
   ];
 
   double makeBin(String? nameVar) {
@@ -55,7 +51,7 @@ class _RegisterPregnant extends State<RegisterPregnant> {
     return 0;
   }
 
-  String? _selectedValOrigin = "Africain";
+  String? _selectedValOrigin = "Afrique";
 
   _originState() {
     _selectedValOrigin = _originList[0];
@@ -73,8 +69,6 @@ class _RegisterPregnant extends State<RegisterPregnant> {
 
     return regExp.hasMatch(em);
   }
-
-  DateTime now = new DateTime.now();
 
   @override
   void initState() {
@@ -184,30 +178,49 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                                             betweenPregController.text.trim());
                                       }
 
-                                      String? origin = _selectedValOrigin;
-                                      int age =
-                                          int.parse(ageController.text.trim());
+                                      String? origin =
+                                          _selectedValOrigin == "Afrique"
+                                              ? "black"
+                                              : "asian";
+                                      int age = DateTime.now().year -
+                                          int.parse(
+                                              dateinput.text.split("-")[2]);
+
                                       double dia = makeBin(_choiceDia);
                                       double hyper = makeBin(_choiceHyper);
                                       double inVitro = makeBin(_choiceInVitro);
                                       double preeFa = makeBin(_choicePreeFa);
 
-                                      double pregnantWithPree =
-                                          makeBin(_choicePregnantWithPree);
+                                      double pregnantWithPree = 0;
+                                      double pregnantWithoutPree = 0;
+
+                                      if (_choicePregnant == 'non') {
+                                        if (_choicePregnantWithPree == "oui") {
+                                          pregnantWithPree = 1;
+                                          pregnantWithoutPree = 0;
+                                        }
+                                        if (_choicePregnantWithPree == "non") {
+                                          pregnantWithPree = 0;
+                                          pregnantWithoutPree = 1;
+                                        }
+                                      }
+                                      if (_choicePregnant == 'oui') {
+                                        pregnantWithPree = 0;
+                                        pregnantWithoutPree = 0;
+                                      }
                                       double syn = makeBin(_choiceSyn);
 
                                       WrightParametersModel
                                           wrightParametersModel =
                                           WrightParametersModel(
-                                              age: now.year,
+                                              age: age,
                                               chronicHypertension: hyper,
                                               diabetes: dia,
                                               familyHistoryPe: preeFa,
                                               height: tall,
                                               inVitroConception: inVitro,
                                               origin: origin,
-                                              parousNoPe:
-                                                  pregnantWithPree == 1 ? 0 : 1,
+                                              parousNoPe: pregnantWithoutPree,
                                               parousNoPeDifference:
                                                   gestWithout ?? 0,
                                               parousNoPeInterval: between ?? 0,
@@ -217,7 +230,8 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                                               sle: syn,
                                               weight: weight);
                                       wrightParamsCubit.wrightParameters(
-                                          wrightParametersModel, state.token);
+                                          wrightParametersModel,
+                                          state.loginResponse?.token);
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (BuildContext context) {
@@ -225,22 +239,6 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                                           },
                                         ),
                                       );
-                                      var params = {
-                                        "weight": weight,
-                                        "origin": origin,
-                                        "tall": tall,
-                                        "gestWithPree": gestWithPree,
-                                        "gestWithout": gestWithout,
-                                        "between": between,
-                                        "age": age,
-                                        "dia": dia,
-                                        "hyper": hyper,
-                                        "in vitro": inVitro,
-                                        "preeFa": preeFa,
-                                        "pregnant": pregnantWithPree,
-                                        "syn": syn
-                                      };
-                                      print(params);
                                     }
                                   },
                                   builder: (context, state) {
@@ -252,6 +250,12 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                                     return Center(
                                       child: TextButton(
                                         onPressed: () {
+                                          List<String> bornDateArray =
+                                              dateinput.text.split("-");
+                                          String year = bornDateArray[2];
+                                          String month = bornDateArray[1];
+                                          String day = bornDateArray[0];
+                                          String bornDate = "$year-$month-$day";
                                           if (emailController.text.isNotEmpty &&
                                               passController.text.isNotEmpty &&
                                               firstNameController
@@ -259,27 +263,28 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                                               lastNameController
                                                   .text.isNotEmpty &&
                                               phoneController.text.isNotEmpty) {
-                                            RegisterModel
-                                                registerModel = RegisterModel(
-                                                    firstName: firstNameController
+                                            RegisterModel registerModel =
+                                                RegisterModel(
+                                                    firstName:
+                                                        firstNameController.text
+                                                            .trim(),
+                                                    lastName: lastNameController
                                                         .text
                                                         .trim(),
-                                                    lastName:
-                                                        lastNameController
-                                                            .text
-                                                            .trim(),
-                                                    email:
-                                                        emailController
-                                                            .text
-                                                            .trim(),
-                                                    dateOfBirth: dateinput.text,
+                                                    email: emailController
+                                                        .text
+                                                        .trim(),
+                                                    dateOfBirth: bornDate,
                                                     phoneNumber:
                                                         phoneController
                                                             .text
                                                             .trim(),
-                                                    password: passController
-                                                        .text
+                                                    password: passController.text
                                                         .trim(),
+                                                    pregnantWomanPrenancyWeek:
+                                                        int.parse(weekController
+                                                            .text
+                                                            .trim()),
                                                     isGynecologist: false,
                                                     isPregnantWoman: true);
                                             authCubit.register(registerModel);
@@ -392,7 +397,7 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                 children: [
                   Container(
                     child: Text(
-                      "Votre nom",
+                      "Nom",
                       style: safeGoogleFont(
                         'Noto Sans',
                         fontSize: 14 * ffem,
@@ -435,7 +440,7 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                 children: [
                   Container(
                     child: Text(
-                      "Votre prenom",
+                      "Prenom",
                       style: safeGoogleFont(
                         'Noto Sans',
                         fontSize: 14 * ffem,
@@ -478,7 +483,7 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                 children: [
                   Container(
                     child: Text(
-                      "Adresse email",
+                      "Email",
                       style: safeGoogleFont(
                         'Noto Sans',
                         fontSize: 14 * ffem,
@@ -517,12 +522,15 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                   ),
                 ],
               ),
+              SizedBox(
+                height: 10,
+              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     child: Text(
-                      "Numéro de téléphone",
+                      "Téléphone",
                       style: safeGoogleFont(
                         'Noto Sans',
                         fontSize: 14 * ffem,
@@ -559,6 +567,9 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                   )
                 ],
               ),
+              SizedBox(
+                height: 10,
+              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -583,13 +594,15 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                       controller: dateinput,
                       readOnly: true,
                       onTap: () async {
+                        int firstPermitDate = DateTime.now().year - 15;
+                        int lastPermitDate = DateTime.now().year - 50;
                         DateTime? pickedDate = await showDatePicker(
                             context: context,
                             locale: const Locale("fr", "FR"),
-                            initialDate: DateTime.now(),
+                            initialDate: DateTime(firstPermitDate - 1),
                             firstDate: DateTime(
-                                2000), //DateTime.now() - not to allow to choose before today.
-                            lastDate: DateTime(2101));
+                                lastPermitDate), //DateTime.now() - not to allow to choose before today.
+                            lastDate: DateTime(firstPermitDate));
 
                         if (pickedDate != null) {
                           print(
@@ -601,9 +614,8 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                           //you can implement different kind of Date Format here according to your requirement
 
                           setState(() {
-                            print(pickedDate.year);
-                            dateinput.text =
-                                formattedDate; //set output date to TextField value.
+                            dateinput.text = formattedDate;
+                            //set output date to TextField value.
                           });
                         } else {
                           print("Date is not selected");
@@ -616,42 +628,6 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                                 BorderSide(width: 3, color: Color(0xffaeaeae)),
                             borderRadius: BorderRadius.circular(8)),
                         hintText: "Date de naissance",
-                        hintStyle: TextStyle(fontSize: 14),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    child: Text(
-                      "Votre age",
-                      style: safeGoogleFont(
-                        'Noto Sans',
-                        fontSize: 14 * ffem,
-                        fontWeight: FontWeight.w500,
-                        height: 1.4285714286 * ffem / fem,
-                        letterSpacing: 0.0140000002 * fem,
-                        color: const Color(0xbf000000),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    child: TextFormField(
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      controller: ageController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 3, color: Color(0xffaeaeae)),
-                            borderRadius: BorderRadius.circular(8)),
-                        hintText: "Entrez votre age",
                         hintStyle: TextStyle(fontSize: 14),
                       ),
                     ),
@@ -766,7 +742,7 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                 children: [
                   Container(
                     child: Text(
-                      "Votre poids ",
+                      "Poids ",
                       style: safeGoogleFont(
                         'Noto Sans',
                         fontSize: 14 * ffem,
@@ -812,7 +788,7 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                 children: [
                   Container(
                     child: Text(
-                      "Votre taille ",
+                      "Taille ",
                       style: safeGoogleFont(
                         'Noto Sans',
                         fontSize: 14 * ffem,
@@ -859,7 +835,7 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                 children: [
                   Container(
                     child: Text(
-                      'Votre Origin',
+                      'Origine',
                       style: safeGoogleFont(
                         'Noto Sans',
                         fontSize: 14 * ffem,
@@ -1051,6 +1027,9 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                           groupValue: _choicePregnant,
                           onChanged: (value) {
                             setState(() {
+                              gestWithPreeController.text = "";
+                              gestWithoutPreeController.text = "";
+                              betweenPregController.text = "";
                               _choicePregnant = value;
                             });
                           },
@@ -1060,7 +1039,7 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                   )
                 ],
               ),
-              if (_choicePregnant == "oui")
+              if (_choicePregnant == "non")
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -1090,6 +1069,8 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                             onChanged: (value) {
                               setState(() {
                                 _choicePregnantWithPree = value;
+                                gestWithoutPreeController.text = "";
+                                betweenPregController.text = "";
                               });
                             },
                           ),
@@ -1102,6 +1083,7 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                             onChanged: (value) {
                               setState(() {
                                 _choicePregnantWithPree = value;
+                                gestWithPreeController.text = "";
                               });
                             },
                           ),
@@ -1110,7 +1092,7 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                     )
                   ],
                 ),
-              if (_choicePregnant == "oui" && _choicePregnantWithPree == "oui")
+              if (_choicePregnant == "non" && _choicePregnantWithPree == "oui")
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -1149,7 +1131,7 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                     ),
                   ],
                 ),
-              if (_choicePregnant == "oui" && _choicePregnantWithPree == "non")
+              if (_choicePregnant == "non" && _choicePregnantWithPree == "non")
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -1188,7 +1170,7 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                     ),
                   ],
                 ),
-              if (_choicePregnant == "oui" && _choicePregnantWithPree == "oui")
+              if (_choicePregnant == "non" && _choicePregnantWithPree == "non")
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -1232,7 +1214,7 @@ class _RegisterPregnant extends State<RegisterPregnant> {
                 children: [
                   Container(
                     child: Text(
-                      "Présence de l´hypertension chronique",
+                      "Présence de l'hypertension chronique",
                       style: safeGoogleFont(
                         'Noto Sans',
                         fontSize: 14 * ffem,

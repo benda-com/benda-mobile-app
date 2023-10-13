@@ -1,4 +1,6 @@
 import 'package:benda/logic/auth/auth_cubit.dart';
+import 'package:benda/logic/user/user_cubit.dart';
+import 'package:benda/logic/user/user_event.dart';
 import 'package:benda/presentation/screen/genyco/home/home.dart';
 import 'package:benda/presentation/screen/pregnant/home_layout.dart';
 import 'package:benda/presentation/screen/register.dart';
@@ -30,6 +32,7 @@ class _LoginState extends State<Login> {
   }
 
   bool _submitted = false;
+  String? errorMessage = "Email ou mot de passe incorrect";
 
   String? get _errorTextEmail {
     final text = emailController.value.text;
@@ -72,6 +75,21 @@ class _LoginState extends State<Login> {
     double baseWidth = 428;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
+    String gynecoFirstName = "";
+    String gynecoLastName = "";
+    String gynecoHospital = "";
+    String gynecoMatricule = "";
+
+    var gyneco;
+
+    if (gyneco is UserCompleted) {
+      gyneco = BlocProvider.of<UserBloc>(context).state as UserCompleted;
+      gynecoFirstName = gyneco.userResponse?.firstName ?? "";
+      gynecoLastName = gyneco.userResponse?.lastName ?? "";
+      gynecoHospital = gyneco.userResponse?.hospital ?? "";
+      gynecoMatricule = gyneco.userResponse?.licenseNumber ?? "";
+    }
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -108,7 +126,7 @@ class _LoginState extends State<Login> {
                             children: [
                               if (!_isCorrectCredentials)
                                 Text(
-                                  "Email ou mot de passe incorrect",
+                                  errorMessage!,
                                   style: safeGoogleFont(
                                     'Noto Sans',
                                     fontSize: 14 * ffem,
@@ -218,8 +236,31 @@ class _LoginState extends State<Login> {
                     ),
                     BlocConsumer<AuthCubit, AuthState>(
                       listener: (context, state) {
+                        if (state is UserCompleted) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) {
+                                return HomeLayout(
+                                  gynecoFirstName: gynecoFirstName,
+                                  gynecoLastName: gynecoLastName,
+                                  gynecoHospital: gynecoHospital,
+                                  gynecoMatricule: gynecoMatricule,
+                                );
+                              },
+                            ),
+                          );
+                        }
+                        if (state is AuthFailed) {
+                          setState(() {
+                            _isCorrectCredentials = false;
+                          });
+                        }
                         if (state is LoginCompleted) {
-                          if (state.is_gynecologist == true) {
+                          if (state.loginResponse?.followId != null) {
+                            BlocProvider.of<UserBloc>(context).add(
+                                UserLoadEvent(state.loginResponse?.followId));
+                          }
+                          if (state.loginResponse?.isGynecologist == true) {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (BuildContext context) {
@@ -231,7 +272,12 @@ class _LoginState extends State<Login> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (BuildContext context) {
-                                  return const HomeLayout();
+                                  return HomeLayout(
+                                    gynecoFirstName: "",
+                                    gynecoLastName: "",
+                                    gynecoHospital: "",
+                                    gynecoMatricule: "",
+                                  );
                                 },
                               ),
                             );
@@ -239,16 +285,15 @@ class _LoginState extends State<Login> {
                         }
                       },
                       builder: (context, state) {
-                        if (state is AuthFailed) {
-                          setState(() {
-                            _isCorrectCredentials = false;
-                          });
-                        }
-                        if (state is AuthLoading) {
+                        if (state is AuthLoading || state is UserLoading) {
                           return const CircularProgressIndicator(
                             color: Colors.blue,
                           );
                         }
+
+                        // if (state is AuthFailed) {
+                        //   return Text("${state.message}");
+                        // }
                         return Container(
                           width: double.infinity,
                           height: 50 * fem,
@@ -303,25 +348,26 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                         TextButton(
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) {
-                                    return const Register();
-                                  },
-                                ),
-                              );
-                            },
-                            child: Text(
-                              "Inscrivez-vous",
-                              style: safeGoogleFont(
-                                'Noto Sans',
-                                fontSize: 14 * ffem,
-                                fontWeight: FontWeight.w500,
-                                height: 1.4285714286 * ffem / fem,
-                                letterSpacing: 0.0140000002 * fem,
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) {
+                                  return const Register();
+                                },
                               ),
-                            ))
+                            );
+                          },
+                          child: Text(
+                            "Inscrivez-vous",
+                            style: safeGoogleFont(
+                              'Noto Sans',
+                              fontSize: 14 * ffem,
+                              fontWeight: FontWeight.w500,
+                              height: 1.4285714286 * ffem / fem,
+                              letterSpacing: 0.0140000002 * fem,
+                            ),
+                          ),
+                        )
                       ],
                     )
                   ],

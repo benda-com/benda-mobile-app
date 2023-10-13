@@ -1,15 +1,15 @@
-import 'package:benda/presentation/screen/pregnant/home_layout.dart';
 import 'package:benda/utils.dart';
 import 'package:flutter/material.dart';
 
 class GenycoCard extends StatelessWidget {
-  const GenycoCard(
-      {super.key,
-      required this.fem,
-      required this.ffem,
-      required this.name,
-      required this.genycoimage,
-      required this.hospitalName});
+  const GenycoCard({
+    super.key,
+    required this.fem,
+    required this.ffem,
+    required this.name,
+    required this.genycoimage,
+    required this.hospitalName,
+  });
 
   final double fem;
   final double ffem;
@@ -25,49 +25,40 @@ class GenycoCard extends StatelessWidget {
         side: BorderSide(color: Color(0xffaeaeae), width: 0.5),
         borderRadius: BorderRadius.circular(5),
       ),
-      child: InkWell(
-        onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (BuildContext context) {
-            return const HomeLayout();
-          }));
-        },
-        child: ListTile(
-          contentPadding: EdgeInsets.all(10),
-          tileColor: Colors.white,
-          leading: CircleAvatar(
-            foregroundImage: AssetImage("images/${genycoimage}"),
-          ),
-          title: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                name,
-                style: safeGoogleFont(
-                  'Inter',
-                  fontSize: 16 * ffem,
-                  fontWeight: FontWeight.w500,
-                  height: 1.2125 * ffem / fem,
-                  color: Color(0xff333333),
-                ),
+      child: ListTile(
+        contentPadding: EdgeInsets.all(10),
+        tileColor: Colors.white,
+        leading: CircleAvatar(
+          foregroundImage: AssetImage("images/${genycoimage}"),
+        ),
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              name,
+              style: safeGoogleFont(
+                'Inter',
+                fontSize: 16 * ffem,
+                fontWeight: FontWeight.w500,
+                height: 1.2125 * ffem / fem,
+                color: Color(0xff333333),
               ),
-              SizedBox(
-                height: 2 * fem,
+            ),
+            SizedBox(
+              height: 2 * fem,
+            ),
+            Text(
+              hospitalName,
+              style: safeGoogleFont(
+                'Inter',
+                fontSize: 13 * ffem,
+                fontWeight: FontWeight.w400,
+                height: 1.2125 * ffem / fem,
+                color: Color(0xff5c5a5a),
               ),
-              Text(
-                // semainesTTM (149:189)
-                hospitalName,
-                style: safeGoogleFont(
-                  'Inter',
-                  fontSize: 13 * ffem,
-                  fontWeight: FontWeight.w400,
-                  height: 1.2125 * ffem / fem,
-                  color: Color(0xff5c5a5a),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
