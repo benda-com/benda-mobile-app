@@ -12,6 +12,7 @@ class HelpInfo extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Color(0xfff8f9f9),
         automaticallyImplyLeading: true,
+        leading: BackButton(),
         elevation: 0,
         title: Image.asset(
           width: 100,

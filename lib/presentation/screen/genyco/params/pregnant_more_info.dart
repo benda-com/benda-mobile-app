@@ -1,18 +1,50 @@
+import 'package:benda/logic/wright_parameter/wright_parameters_bloc.dart';
 import 'package:benda/presentation/widgets/info_item.dart';
 import 'package:flutter/material.dart';
 import 'package:benda/utils.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PregnantMoreInfo extends StatefulWidget {
-  const PregnantMoreInfo({super.key});
+  const PregnantMoreInfo(
+      {super.key,
+      required this.phoneNumber,
+      required this.dateOfBirth,
+      required this.email,
+      required this.name,
+      required this.pregnantWomanPrenancyWeek});
 
+  final String name;
+  final String phoneNumber;
+  final String email;
+  final int pregnantWomanPrenancyWeek;
+  final DateTime dateOfBirth;
   @override
-  State<PregnantMoreInfo> createState() => _PregnantMoreInfoState();
+  State<PregnantMoreInfo> createState() => _PregnantMoreInfoState(
+      dateOfBirth: dateOfBirth,
+      email: email,
+      name: name,
+      phoneNumber: phoneNumber,
+      pregnantWomanPrenancyWeek: pregnantWomanPrenancyWeek);
 }
 
 class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
   bool _isVisibleParams = false;
   bool _isVisibleInfo = true;
   bool _isVisibleAnte = false;
+
+  final String name;
+  final String phoneNumber;
+  final String email;
+  final int pregnantWomanPrenancyWeek;
+  final DateTime dateOfBirth;
+
+  _PregnantMoreInfoState({
+    required this.name,
+    required this.phoneNumber,
+    required this.dateOfBirth,
+    required this.email,
+    required this.pregnantWomanPrenancyWeek,
+  });
 
   void showInfo() {
     setState(() {
@@ -37,6 +69,44 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
     double baseWidth = 428;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
+    final wrightBloc = BlocProvider.of<WrightParametersBloc>(context).state;
+
+    var age;
+    var chronicHypertension;
+    var diabetes;
+    var familyHistoryPe;
+    var height;
+    var inVitroConception;
+    var origin;
+    var parousNoPe;
+    var parousNoPeDifference;
+    var parousNoPeInterval;
+    var sle;
+    var weight;
+    var parousPe;
+    var parousPeDifference;
+
+    if (wrightBloc is WrightParametersCompleted) {
+      age = wrightBloc.wrightParametersResponse?.age;
+      chronicHypertension =
+          wrightBloc.wrightParametersResponse?.chronicHypertension;
+      diabetes = wrightBloc.wrightParametersResponse?.diabetes;
+      familyHistoryPe = wrightBloc.wrightParametersResponse?.familyHistoryPe;
+      height = wrightBloc.wrightParametersResponse?.height;
+      inVitroConception =
+          wrightBloc.wrightParametersResponse?.inVitroConception;
+      origin = wrightBloc.wrightParametersResponse?.origin;
+      parousNoPe = wrightBloc.wrightParametersResponse?.parousNoPe;
+      parousNoPeDifference =
+          wrightBloc.wrightParametersResponse?.parousNoPeDifference;
+      parousNoPeInterval =
+          wrightBloc.wrightParametersResponse?.parousNoPeInterval;
+      sle = wrightBloc.wrightParametersResponse?.sle;
+      weight = wrightBloc.wrightParametersResponse?.weight;
+      parousPe = wrightBloc.wrightParametersResponse?.parousPe;
+      parousPeDifference =
+          wrightBloc.wrightParametersResponse?.parousPeDifference;
+    }
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -123,31 +193,7 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                                           width: 0.5)),
                                 ),
                                 child: Text(
-                                  'Nom: KITIO ',
-                                  style: safeGoogleFont(
-                                    'Roboto',
-                                    fontSize: 15 * ffem,
-                                    fontWeight: FontWeight.w400,
-                                    height: 1.3333333333 * ffem / fem,
-                                    color: Color(0xff5c5a5a),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30 * fem,
-                              ),
-                              Container(
-                                padding: EdgeInsets.fromLTRB(
-                                    0 * fem, 10 * fem, 0 * fem, 10 * fem),
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color(0xffd9d9d9),
-                                          width: 0.5)),
-                                ),
-                                child: Text(
-                                  'Prenom: Ivanna',
+                                  'Nom et prenom: $name ',
                                   style: safeGoogleFont(
                                     'Roboto',
                                     fontSize: 15 * ffem,
@@ -164,7 +210,7 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                                   fem: fem,
                                   ffem: ffem,
                                   textName: 'Téléphone',
-                                  textValue: '+237 690000000'),
+                                  textValue: '$phoneNumber'),
                               SizedBox(
                                 height: 30 * fem,
                               ),
@@ -172,15 +218,15 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                                   fem: fem,
                                   ffem: ffem,
                                   textName: 'Email',
-                                  textValue: 'ivankitio@gmail.com'),
+                                  textValue: '$email'),
                               SizedBox(
                                 height: 30 * fem,
                               ),
                               InfoItemWidget(
                                   fem: fem,
                                   ffem: ffem,
-                                  textName: 'Date de naissance',
-                                  textValue: '24-12-2007'),
+                                  textName: 'Age',
+                                  textValue: '${age} ans'),
                             ],
                           ),
                         ),
@@ -260,7 +306,7 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                             fem: fem,
                             ffem: ffem,
                             textName: 'Semaine de grossesse',
-                            textValue: '24'),
+                            textValue: '$pregnantWomanPrenancyWeek'),
                         SizedBox(
                           height: 17 * fem,
                         ),
@@ -268,7 +314,7 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                             fem: fem,
                             ffem: ffem,
                             textName: 'Taille',
-                            textValue: '1.70m'),
+                            textValue: '${height}m'),
                         SizedBox(
                           height: 17 * fem,
                         ),
@@ -276,7 +322,16 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                             fem: fem,
                             ffem: ffem,
                             textName: 'Poids',
-                            textValue: '90kg'),
+                            textValue: '${weight}kg'),
+                        SizedBox(
+                          height: 17 * fem,
+                        ),
+                        InfoItemWidget(
+                            fem: fem,
+                            ffem: ffem,
+                            textName: 'Votre origine',
+                            textValue:
+                                '${origin == 'black' ? 'Africain' : 'Sud-asiatique'}'),
                         SizedBox(
                           height: 17 * fem,
                         ),
@@ -309,14 +364,6 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                             ffem: ffem,
                             textName: 'Température',
                             textValue: '30 C'),
-                        SizedBox(
-                          height: 17 * fem,
-                        ),
-                        InfoItemWidget(
-                            fem: fem,
-                            ffem: ffem,
-                            textName: 'Votre origin',
-                            textValue: 'Africain'),
                         SizedBox(
                           height: 17 * fem,
                         ),
@@ -404,7 +451,8 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                                   fem: fem,
                                   ffem: ffem,
                                   textName: 'Conception in vitro',
-                                  textValue: 'Oui'),
+                                  textValue:
+                                      '${inVitroConception == 1.0 ? "Oui" : "Non"}'),
                               SizedBox(
                                 height: 17 * fem,
                               ),
@@ -412,12 +460,7 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                                   fem: fem,
                                   ffem: ffem,
                                   textName: 'Syndrome antiphospholipide',
-                                  textValue: 'Non'),
-                              InfoItemWidget(
-                                  fem: fem,
-                                  ffem: ffem,
-                                  textName: 'Prééclampsie dans la famille',
-                                  textValue: 'Non'),
+                                  textValue: '${sle == 1.0 ? "Oui" : "Non"}'),
                               SizedBox(
                                 height: 17 * fem,
                               ),
@@ -425,7 +468,15 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                                   fem: fem,
                                   ffem: ffem,
                                   textName: 'Hypertension chronique',
-                                  textValue: 'Oui'),
+                                  textValue:
+                                      '${chronicHypertension == 1.0 ? "Oui" : "Non"}'),
+                              if (chronicHypertension == 1.0)
+                                InfoItemWidget(
+                                    fem: fem,
+                                    ffem: ffem,
+                                    textName:
+                                        'antécédents de prééclampsie chez la mère',
+                                    textValue: '$familyHistoryPe'),
                               SizedBox(
                                 height: 17 * fem,
                               ),
@@ -433,7 +484,43 @@ class _PregnantMoreInfoState extends State<PregnantMoreInfo> {
                                   fem: fem,
                                   ffem: ffem,
                                   textName: 'Diabète sucré',
-                                  textValue: 'Non'),
+                                  textValue:
+                                      '${diabetes == 1.0 ? "Oui" : "Non"}'),
+                              InfoItemWidget(
+                                  fem: fem,
+                                  ffem: ffem,
+                                  textName:
+                                      'Accouchement avec survenance de prééclampsie',
+                                  textValue:
+                                      '${parousPe == 1.0 ? "Oui" : "Non"}'),
+                              if (parousPe == 1.0)
+                                InfoItemWidget(
+                                    fem: fem,
+                                    ffem: ffem,
+                                    textName:
+                                        "âge gestationnel à l'accouchement",
+                                    textValue: '$parousPeDifference'),
+                              InfoItemWidget(
+                                  fem: fem,
+                                  ffem: ffem,
+                                  textName:
+                                      "Accouchement sans survenance de prééclampsie",
+                                  textValue:
+                                      '${parousNoPe == 1.0 ? "Oui" : "Non"}'),
+                              if (parousNoPe == 1.0)
+                                InfoItemWidget(
+                                    fem: fem,
+                                    ffem: ffem,
+                                    textName:
+                                        "Age gestationnel à l'accouchement",
+                                    textValue: '${parousNoPeDifference}'),
+                              if (parousNoPe == 1.0)
+                                InfoItemWidget(
+                                    fem: fem,
+                                    ffem: ffem,
+                                    textName:
+                                        "Durée entre les deux accouchements",
+                                    textValue: '${parousNoPeInterval}'),
                             ],
                           ),
                         ),

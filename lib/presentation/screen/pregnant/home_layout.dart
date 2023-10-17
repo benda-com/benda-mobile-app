@@ -1,4 +1,10 @@
+import 'package:benda/data/repositories/user_repository.dart';
 import 'package:benda/logic/auth/auth_cubit.dart';
+import 'package:benda/logic/preg_to_gyneco/preg_to_gyneco_bloc.dart';
+import 'package:benda/logic/risk/risk_bloc.dart';
+import 'package:benda/logic/user/user_cubit.dart';
+import 'package:benda/logic/user/user_event.dart';
+import 'package:benda/logic/wright_parameter/wright_parameters_bloc.dart';
 import 'package:benda/presentation/screen/aboutUs.dart';
 import 'package:benda/presentation/screen/login.dart';
 import 'package:benda/presentation/screen/pregnant/help.dart';
@@ -11,59 +17,44 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeLayout extends StatefulWidget {
-  final String gynecoFirstName;
-  final String gynecoLastName;
-  final String gynecoMatricule;
-  final String gynecoHospital;
-  const HomeLayout(
-      {super.key,
-      required this.gynecoFirstName,
-      required this.gynecoLastName,
-      required this.gynecoMatricule,
-      required this.gynecoHospital});
+  const HomeLayout({
+    super.key,
+  });
 
   @override
-  State<HomeLayout> createState() => _HomeLayoutState(
-        gynecoFirstName: gynecoFirstName,
-        gynecoHospital: gynecoHospital,
-        gynecoLastName: gynecoLastName,
-        gynecoMatricule: gynecoMatricule,
-      );
+  State<HomeLayout> createState() => _HomeLayoutState();
 }
 
 class _HomeLayoutState extends State<HomeLayout> {
-  final String gynecoFirstName;
-  final String gynecoLastName;
-  final String gynecoMatricule;
-  final String gynecoHospital;
-
-  _HomeLayoutState(
-      {required this.gynecoFirstName,
-      required this.gynecoLastName,
-      required this.gynecoMatricule,
-      required this.gynecoHospital});
   int _selectedIndex = 1;
 
   @override
   Widget build(BuildContext context) {
+    final wrightBloc = BlocProvider.of<WrightParametersBloc>(context);
+
     void __onItemtapped(int index) {
       setState(() {
         _selectedIndex = index;
       });
     }
 
+    final userBloc = BlocProvider.of<AuthCubit>(context);
+    final riskBloc = BlocProvider.of<RiskBloc>(context);
+    final pregToGynecoBloc = BlocProvider.of<PregToGynecoBloc>(context).state;
+    var gynecoId;
+    var user = userBloc.state as LoginCompleted;
+    if (pregToGynecoBloc is PregToGynecoCompleted) {
+      gynecoId = pregToGynecoBloc.userResponse?.followId;
+    } else {
+      gynecoId = user.loginResponse?.followId;
+    }
+
     List<Widget> _widgetOptions = <Widget>[
-      GenycoInfo(
-        gynecoFirstName: gynecoFirstName,
-        gynecoHospital: gynecoHospital,
-        gynecoLastName: gynecoLastName,
-        gynecoMatricule: gynecoMatricule,
-      ),
+      const GenycoInfo(),
       const HomePregnant(),
       const DeviceHome(),
     ];
-    final userBloc = BlocProvider.of<AuthCubit>(context);
-    var user = userBloc.state as LoginCompleted;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xfff8f9f9),
@@ -78,19 +69,27 @@ class _HomeLayoutState extends State<HomeLayout> {
         centerTitle: true,
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return const NotificationPregnant();
-                    },
-                  ),
-                );
-              },
-              icon: Icon(
-                Icons.notifications,
-                color: Color.fromARGB(255, 92, 91, 91),
-              ))
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return const NotificationPregnant();
+                  },
+                ),
+              );
+            },
+            icon: Icon(
+              Icons.notifications,
+              color: Color.fromARGB(255, 92, 91, 91),
+            ),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.camera,
+              color: Color.fromARGB(255, 92, 91, 91),
+            ),
+          )
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -179,7 +178,40 @@ class _HomeLayoutState extends State<HomeLayout> {
           ],
         ),
       ),
-      body: _widgetOptions[_selectedIndex],
+      body: BlocProvider(
+        create: (context) =>
+            UserBloc(userRepo: UserRepository())..add(UserLoadEvent(gynecoId)),
+        child: BlocListener<WrightParametersBloc, WrightParametersState>(
+          listener: (context, state) {
+            if (state is WrightParametersCompleted) {
+              riskBloc.add(RiskLoadEvent(state.wrightParametersResponse?.id));
+            }
+          },
+          child: BlocListener<UserBloc, UserState>(listener: (context, state) {
+            print(state);
+            if (state is UserCompleted) {
+              wrightBloc
+                  .add(WrightParametersLoadEvent(user.loginResponse?.email));
+            }
+          }, child: BlocBuilder<RiskBloc, RiskState>(
+            builder: (context, state) {
+              if (state is RiskInitial || state is RiskLoading) {
+                return Center(
+                  child: const CircularProgressIndicator(
+                    color: Colors.blue,
+                  ),
+                );
+              }
+
+              if (state is RiskCompleted) {
+                return _widgetOptions[_selectedIndex];
+              }
+
+              return Container();
+            },
+          )),
+        ),
+      ),
     );
   }
 }

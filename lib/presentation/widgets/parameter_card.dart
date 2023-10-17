@@ -54,13 +54,14 @@ class ParameterCardWidget extends StatelessWidget {
                   margin:
                       EdgeInsets.fromLTRB(0 * fem, 0 * fem, 48 * fem, 13 * fem),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         margin: EdgeInsets.fromLTRB(
                             0 * fem, 0 * fem, 0 * fem, 5 * fem),
                         child: Text(
                           paramName,
+                          textAlign: TextAlign.center,
                           style: safeGoogleFont(
                             'Roboto',
                             fontSize: 16 * ffem,

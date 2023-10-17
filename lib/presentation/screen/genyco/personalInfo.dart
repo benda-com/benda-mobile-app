@@ -1,7 +1,9 @@
+import 'package:benda/logic/auth/auth_cubit.dart';
 import 'package:benda/presentation/screen/genyco/editProfil.dart';
 import 'package:benda/presentation/widgets/info_item.dart';
 import 'package:flutter/material.dart';
 import 'package:benda/utils.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PersonalInfo extends StatelessWidget {
   const PersonalInfo({super.key});
@@ -10,6 +12,37 @@ class PersonalInfo extends StatelessWidget {
     double baseWidth = 428;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
+    final authCubit = BlocProvider.of<AuthCubit>(context);
+
+    String? firstName = "";
+    String? lastName = "";
+    String? email = "";
+    String? licenseNumber = "";
+    String? phoneNumber = "";
+    String? hospital = "";
+    DateTime? dateOfBirth;
+
+    if (authCubit.state is LoginCompleted) {
+      LoginCompleted authState = authCubit.state as LoginCompleted;
+      firstName = authState.loginResponse?.firstName;
+      lastName = authState.loginResponse?.lastName;
+      email = authState.loginResponse?.email;
+      licenseNumber = authState.loginResponse?.licenseNumber;
+      phoneNumber = authState.loginResponse?.phoneNumber;
+      hospital = authState.loginResponse?.hospital;
+      dateOfBirth = authState.loginResponse?.dateOfBirth;
+    }
+    if (authCubit.state is RegisterCompleted) {
+      RegisterCompleted authState = authCubit.state as RegisterCompleted;
+      firstName = authState.registerResponse?.firstName;
+      lastName = authState.registerResponse?.lastName;
+      email = authState.registerResponse?.email;
+      licenseNumber = authState.registerResponse?.licenseNumber;
+      phoneNumber = authState.registerResponse?.phoneNumber;
+      hospital = authState.registerResponse?.hospital;
+      dateOfBirth = authState.registerResponse?.dateOfBirth;
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xfff8f9f9),
@@ -60,8 +93,16 @@ class PersonalInfo extends StatelessWidget {
                     InfoItemWidget(
                         fem: fem,
                         ffem: ffem,
-                        textName: 'Nom complet',
-                        textValue: ' Ivan KITIO'),
+                        textName: 'Nom:',
+                        textValue: '$firstName'),
+                    SizedBox(
+                      height: 30 * fem,
+                    ),
+                    InfoItemWidget(
+                        fem: fem,
+                        ffem: ffem,
+                        textName: 'Prenom: ',
+                        textValue: '$lastName'),
                     SizedBox(
                       height: 30 * fem,
                     ),
@@ -69,7 +110,7 @@ class PersonalInfo extends StatelessWidget {
                         fem: fem,
                         ffem: ffem,
                         textName: 'Téléphone',
-                        textValue: '+237 690000000'),
+                        textValue: '$phoneNumber'),
                     SizedBox(
                       height: 30 * fem,
                     ),
@@ -77,7 +118,15 @@ class PersonalInfo extends StatelessWidget {
                         fem: fem,
                         ffem: ffem,
                         textName: 'Email',
-                        textValue: 'ivankitio@gmail.com'),
+                        textValue: '$email'),
+                    SizedBox(
+                      height: 30 * fem,
+                    ),
+                    InfoItemWidget(
+                        fem: fem,
+                        ffem: ffem,
+                        textName: 'Date de naissance',
+                        textValue: '${dateOfBirth.toString().split(' ')[0]}'),
                     SizedBox(
                       height: 30 * fem,
                     ),
@@ -85,7 +134,7 @@ class PersonalInfo extends StatelessWidget {
                         fem: fem,
                         ffem: ffem,
                         textName: 'Hôpital',
-                        textValue: 'hôpital Laquintine de Douala'),
+                        textValue: '$hospital'),
                     SizedBox(
                       height: 30 * fem,
                     ),
@@ -93,7 +142,7 @@ class PersonalInfo extends StatelessWidget {
                         fem: fem,
                         ffem: ffem,
                         textName: 'Matricule',
-                        textValue: '1234567890'),
+                        textValue: '$licenseNumber'),
                   ],
                 ),
               ),

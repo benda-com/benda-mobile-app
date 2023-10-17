@@ -8,6 +8,7 @@ import 'package:benda/logic/patient/patient_bloc.dart';
 import 'package:benda/logic/preg_to_gyneco/preg_to_gyneco_bloc.dart';
 import 'package:benda/logic/risk/risk_bloc.dart';
 import 'package:benda/logic/user/user_cubit.dart';
+import 'package:benda/logic/wright_parameter/wright_parameters_bloc.dart';
 import 'package:benda/logic/wright_parameters/wright_parameters_cubit.dart';
 import 'package:benda/presentation/screen/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,11 @@ void main() {
       ),
       BlocProvider(
         create: ((context) => WrightParametersCubit(
+              wrightParamsRepo: WrightParamsRepository(),
+            )),
+      ),
+      BlocProvider(
+        create: ((context) => WrightParametersBloc(
               wrightParamsRepo: WrightParamsRepository(),
             )),
       ),

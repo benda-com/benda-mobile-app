@@ -3,15 +3,22 @@ import 'package:benda/presentation/widgets/history_card.dart';
 import 'package:benda/utils.dart';
 
 class History extends StatefulWidget {
-  const History({super.key});
+  final String name;
+  const History({
+    super.key,
+    required this.name,
+  });
 
   @override
-  State<History> createState() => _HistoryState();
+  State<History> createState() => _HistoryState(name: name);
 }
 
 class _HistoryState extends State<History> {
   final _dateC = TextEditingController();
   final _timeC = TextEditingController();
+  final String name;
+
+  _HistoryState({required this.name});
 
   ///Date
   DateTime selected = DateTime.now();
@@ -62,7 +69,7 @@ class _HistoryState extends State<History> {
                   margin:
                       EdgeInsets.fromLTRB(5 * fem, 0 * fem, 0 * fem, 40 * fem),
                   child: Text(
-                    'Viviane FOKOU',
+                    '$name',
                     style: safeGoogleFont(
                       'Roboto',
                       fontSize: 20 * ffem,

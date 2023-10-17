@@ -1,7 +1,9 @@
+import 'package:benda/logic/auth/auth_cubit.dart';
 import 'package:benda/presentation/screen/genyco/personalInfo.dart';
 import 'package:benda/presentation/widgets/form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:benda/utils.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditProfil extends StatefulWidget {
   @override
@@ -28,6 +30,38 @@ class _EditProfil extends State<EditProfil> {
     double baseWidth = 428;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
+
+    final authCubit = BlocProvider.of<AuthCubit>(context);
+
+    String? firstName = "";
+    String? lastName = "";
+    String? email = "";
+    String? licenseNumber = "";
+    String? phoneNumber = "";
+    String? hospital = "";
+    DateTime? dateOfBirth;
+
+    if (authCubit.state is LoginCompleted) {
+      LoginCompleted authState = authCubit.state as LoginCompleted;
+      firstName = authState.loginResponse?.firstName;
+      lastName = authState.loginResponse?.lastName;
+      email = authState.loginResponse?.email;
+      licenseNumber = authState.loginResponse?.licenseNumber;
+      phoneNumber = authState.loginResponse?.phoneNumber;
+      hospital = authState.loginResponse?.hospital;
+      dateOfBirth = authState.loginResponse?.dateOfBirth;
+    }
+    if (authCubit.state is RegisterCompleted) {
+      RegisterCompleted authState = authCubit.state as RegisterCompleted;
+      firstName = authState.registerResponse?.firstName;
+      lastName = authState.registerResponse?.lastName;
+      email = authState.registerResponse?.email;
+      licenseNumber = authState.registerResponse?.licenseNumber;
+      phoneNumber = authState.registerResponse?.phoneNumber;
+      hospital = authState.registerResponse?.hospital;
+      dateOfBirth = authState.registerResponse?.dateOfBirth;
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xfff8f9f9),
@@ -78,8 +112,17 @@ class _EditProfil extends State<EditProfil> {
                       TextFieldWidget(
                           fem: fem,
                           ffem: ffem,
-                          fieldName: "Nom complet",
-                          defaultValue: "Ivan KITIO",
+                          fieldName: "Nom:",
+                          defaultValue: "$firstName",
+                          placeholder: "Nom complet"),
+                      SizedBox(
+                        height: 30 * fem,
+                      ),
+                      TextFieldWidget(
+                          fem: fem,
+                          ffem: ffem,
+                          fieldName: "Prenom:",
+                          defaultValue: "$lastName",
                           placeholder: "Nom complet"),
                       SizedBox(
                         height: 30 * fem,
@@ -88,7 +131,7 @@ class _EditProfil extends State<EditProfil> {
                           fem: fem,
                           ffem: ffem,
                           fieldName: "Téléphone",
-                          defaultValue: "690000000",
+                          defaultValue: "$phoneNumber",
                           placeholder: "Téléphone"),
                       SizedBox(
                         height: 30 * fem,
@@ -97,7 +140,7 @@ class _EditProfil extends State<EditProfil> {
                           fem: fem,
                           ffem: ffem,
                           fieldName: "Email",
-                          defaultValue: "ivankitio@gmail.com",
+                          defaultValue: "$email",
                           placeholder: "Email"),
                       SizedBox(
                         height: 30 * fem,
@@ -158,7 +201,7 @@ class _EditProfil extends State<EditProfil> {
                           fem: fem,
                           ffem: ffem,
                           fieldName: "Matricule",
-                          defaultValue: "1234567890",
+                          defaultValue: "$licenseNumber",
                           placeholder: "Matricule"),
                     ],
                   ),

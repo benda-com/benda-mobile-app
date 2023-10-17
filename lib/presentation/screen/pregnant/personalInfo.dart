@@ -55,6 +55,22 @@ class _PregnantInfoState extends State<PregnantInfo> {
     double? tall = wrightParameter.wrightParametersResponse?.height;
     double? weight = wrightParameter.wrightParametersResponse?.weight;
     String? origin = wrightParameter.wrightParametersResponse?.origin;
+    double? sle = wrightParameter.wrightParametersResponse?.sle;
+    double? diabetes = wrightParameter.wrightParametersResponse?.diabetes;
+    double? chronicHypertension =
+        wrightParameter.wrightParametersResponse?.chronicHypertension;
+    double? familyHistoryPe =
+        wrightParameter.wrightParametersResponse?.familyHistoryPe;
+    double? inVitroConception =
+        wrightParameter.wrightParametersResponse?.inVitroConception;
+    double? parousNoPe = wrightParameter.wrightParametersResponse?.parousNoPe;
+    var parousNoPeDifference =
+        wrightParameter.wrightParametersResponse?.parousNoPeDifference;
+    var parousNoPeInterval =
+        wrightParameter.wrightParametersResponse?.parousNoPeInterval;
+    var parousPeDifference =
+        wrightParameter.wrightParametersResponse?.parousPeDifference;
+    double? parousPe = wrightParameter.wrightParametersResponse?.parousPe;
 
     if (authCubit.state is LoginCompleted) {
       LoginCompleted user = authCubit.state as LoginCompleted;
@@ -441,7 +457,8 @@ class _PregnantInfoState extends State<PregnantInfo> {
                                     fem: fem,
                                     ffem: ffem,
                                     textName: 'Conception in vitro',
-                                    textValue: 'Oui'),
+                                    textValue:
+                                        '${inVitroConception == 1.0 ? "Oui" : "Non"}'),
                                 SizedBox(
                                   height: 17 * fem,
                                 ),
@@ -449,15 +466,7 @@ class _PregnantInfoState extends State<PregnantInfo> {
                                     fem: fem,
                                     ffem: ffem,
                                     textName: 'Syndrome antiphospholipide',
-                                    textValue: 'Non'),
-                                SizedBox(
-                                  height: 17 * fem,
-                                ),
-                                InfoItemWidget(
-                                    fem: fem,
-                                    ffem: ffem,
-                                    textName: 'Prééclampsie dans la famille',
-                                    textValue: 'Non'),
+                                    textValue: '${sle == 1.0 ? "Oui" : "Non"}'),
                                 SizedBox(
                                   height: 17 * fem,
                                 ),
@@ -465,7 +474,15 @@ class _PregnantInfoState extends State<PregnantInfo> {
                                     fem: fem,
                                     ffem: ffem,
                                     textName: 'Hypertension chronique',
-                                    textValue: 'Oui'),
+                                    textValue:
+                                        '${chronicHypertension == 1.0 ? "Oui" : "Non"}'),
+                                if (chronicHypertension == 1.0)
+                                  InfoItemWidget(
+                                      fem: fem,
+                                      ffem: ffem,
+                                      textName:
+                                          'antécédents de prééclampsie chez la mère',
+                                      textValue: '$familyHistoryPe'),
                                 SizedBox(
                                   height: 17 * fem,
                                 ),
@@ -473,7 +490,43 @@ class _PregnantInfoState extends State<PregnantInfo> {
                                     fem: fem,
                                     ffem: ffem,
                                     textName: 'Diabète sucré',
-                                    textValue: 'Non'),
+                                    textValue:
+                                        '${diabetes == 1.0 ? "Oui" : "Non"}'),
+                                InfoItemWidget(
+                                    fem: fem,
+                                    ffem: ffem,
+                                    textName:
+                                        'Accouchement avec survenance de prééclampsie',
+                                    textValue:
+                                        '${parousPe == 1.0 ? "Oui" : "Non"}'),
+                                if (parousPe == 1.0)
+                                  InfoItemWidget(
+                                      fem: fem,
+                                      ffem: ffem,
+                                      textName:
+                                          "âge gestationnel à l'accouchement",
+                                      textValue: '$parousPeDifference'),
+                                InfoItemWidget(
+                                    fem: fem,
+                                    ffem: ffem,
+                                    textName:
+                                        "Accouchement sans survenance de prééclampsie",
+                                    textValue:
+                                        '${parousNoPe == 1.0 ? "Oui" : "Non"}'),
+                                if (parousNoPe == 1.0)
+                                  InfoItemWidget(
+                                      fem: fem,
+                                      ffem: ffem,
+                                      textName:
+                                          "Age gestationnel à l'accouchement",
+                                      textValue: '${parousNoPeDifference}'),
+                                if (parousNoPe == 1.0)
+                                  InfoItemWidget(
+                                      fem: fem,
+                                      ffem: ffem,
+                                      textName:
+                                          "Durée entre les deux accouchements",
+                                      textValue: '${parousNoPeInterval}'),
                               ],
                             ),
                           ),

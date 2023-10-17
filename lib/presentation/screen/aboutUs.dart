@@ -192,7 +192,7 @@ En collaborant avec nous, vous pouvez être assurés que vous bénéficierez d�
                       ),
                       Text(
                         // httpsbendacomr3Z (254:263)
-                        'https://benda.com',
+                        'https://bendacm.net',
                         style: safeGoogleFont(
                           'Roboto',
                           fontSize: 16 * ffem,
@@ -243,8 +243,7 @@ En collaborant avec nous, vous pouvez être assurés que vous bénéficierez d�
                         ),
                       ),
                       Text(
-                        // httpsbendacomconfidentialityXJ (254:372)
-                        'https://benda.com/confidentiality',
+                        'https://bendacm.net',
                         style: safeGoogleFont(
                           'Roboto',
                           fontSize: 16 * ffem,

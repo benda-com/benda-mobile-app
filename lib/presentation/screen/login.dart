@@ -1,6 +1,4 @@
 import 'package:benda/logic/auth/auth_cubit.dart';
-import 'package:benda/logic/user/user_cubit.dart';
-import 'package:benda/logic/user/user_event.dart';
 import 'package:benda/presentation/screen/genyco/home/home.dart';
 import 'package:benda/presentation/screen/pregnant/home_layout.dart';
 import 'package:benda/presentation/screen/register.dart';
@@ -75,20 +73,6 @@ class _LoginState extends State<Login> {
     double baseWidth = 428;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    String gynecoFirstName = "";
-    String gynecoLastName = "";
-    String gynecoHospital = "";
-    String gynecoMatricule = "";
-
-    var gyneco;
-
-    if (gyneco is UserCompleted) {
-      gyneco = BlocProvider.of<UserBloc>(context).state as UserCompleted;
-      gynecoFirstName = gyneco.userResponse?.firstName ?? "";
-      gynecoLastName = gyneco.userResponse?.lastName ?? "";
-      gynecoHospital = gyneco.userResponse?.hospital ?? "";
-      gynecoMatricule = gyneco.userResponse?.licenseNumber ?? "";
-    }
 
     return Scaffold(
       body: SafeArea(
@@ -236,30 +220,12 @@ class _LoginState extends State<Login> {
                     ),
                     BlocConsumer<AuthCubit, AuthState>(
                       listener: (context, state) {
-                        if (state is UserCompleted) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (BuildContext context) {
-                                return HomeLayout(
-                                  gynecoFirstName: gynecoFirstName,
-                                  gynecoLastName: gynecoLastName,
-                                  gynecoHospital: gynecoHospital,
-                                  gynecoMatricule: gynecoMatricule,
-                                );
-                              },
-                            ),
-                          );
-                        }
                         if (state is AuthFailed) {
                           setState(() {
                             _isCorrectCredentials = false;
                           });
                         }
                         if (state is LoginCompleted) {
-                          if (state.loginResponse?.followId != null) {
-                            BlocProvider.of<UserBloc>(context).add(
-                                UserLoadEvent(state.loginResponse?.followId));
-                          }
                           if (state.loginResponse?.isGynecologist == true) {
                             Navigator.of(context).push(
                               MaterialPageRoute(
@@ -272,12 +238,7 @@ class _LoginState extends State<Login> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (BuildContext context) {
-                                  return HomeLayout(
-                                    gynecoFirstName: "",
-                                    gynecoLastName: "",
-                                    gynecoHospital: "",
-                                    gynecoMatricule: "",
-                                  );
+                                  return HomeLayout();
                                 },
                               ),
                             );
@@ -285,7 +246,7 @@ class _LoginState extends State<Login> {
                         }
                       },
                       builder: (context, state) {
-                        if (state is AuthLoading || state is UserLoading) {
+                        if (state is AuthLoading) {
                           return const CircularProgressIndicator(
                             color: Colors.blue,
                           );

@@ -57,7 +57,7 @@ class HelpInfo extends StatelessWidget {
                     maxWidth: 348 * fem,
                   ),
                   child: Text(
-                    '        Lorem ipsum dolor sit amet consectetur. Donec phasellus leo faucibus eget. Est scelerisque congue est dui quam consectetur. Non nunc nibh pellentesque malesuada adipiscing nunc diam ipsum. Dictum nisl viverra laoreet hendrerit. A vel enim enim ipsum egestas. Elementum commodo ',
+                    """  En nous basant sur les concepts de l'IoT et l'intelligence artificielle nous apportons: une evaluation du risque de prééclampsie,  un Suivi en temps réel de la femme""",
                     style: safeGoogleFont(
                       'Roboto',
                       fontSize: 15 * ffem,
@@ -105,7 +105,7 @@ class HelpInfo extends StatelessWidget {
                           maxWidth: 272 * fem,
                         ),
                         child: Text(
-                          'Lorem ipsum dolor sit amet consectetur. Donec phasellus leo faucibus eget. Est scelerisque congue est dui quam consectetur. Non nunc nibh pellentesque malesuada adipisc .',
+                          'Incrivez-vous sur l"application',
                           style: safeGoogleFont(
                             'Roboto',
                             fontSize: 15 * ffem,
@@ -138,7 +138,7 @@ class HelpInfo extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text(
-                            '2\n',
+                            '2',
                             textAlign: TextAlign.center,
                             style: safeGoogleFont(
                               'Inter',
@@ -156,7 +156,7 @@ class HelpInfo extends StatelessWidget {
                           maxWidth: 275 * fem,
                         ),
                         child: Text(
-                          'Lorem ipsum dolor sit amet consectetur. Donec phasellus leo faucibus eget. Est scelerisque congue est dui quam consectetur. Non nunc nibh pellentesque malesuada adipisc .',
+                          'Connectez votre dispositif a notre application',
                           style: safeGoogleFont(
                             'Roboto',
                             fontSize: 15 * ffem,
@@ -170,27 +170,54 @@ class HelpInfo extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  // frame368to (254:277)
+                  // frame934Th (254:275)
                   margin: EdgeInsets.fromLTRB(
-                      25 * fem, 0 * fem, 0 * fem, 103 * fem),
-                  width: 42 * fem,
-                  height: 42 * fem,
-                  decoration: BoxDecoration(
-                    color: Color(0x190072c5),
-                    borderRadius: BorderRadius.circular(21 * fem),
-                  ),
-                  child: Center(
-                    child: Text(
-                      '3\n',
-                      textAlign: TextAlign.center,
-                      style: safeGoogleFont(
-                        'Inter',
-                        fontSize: 19.6000003815 * ffem,
-                        fontWeight: FontWeight.w400,
-                        height: 1.2125 * ffem / fem,
-                        color: Color(0xff0072c5),
+                      25 * fem, 0 * fem, 20 * fem, 25 * fem),
+                  width: double.infinity,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        // frame35Pks (254:266)
+                        margin: EdgeInsets.fromLTRB(
+                            0 * fem, 0 * fem, 14 * fem, 0 * fem),
+                        width: 42 * fem,
+                        height: 42 * fem,
+                        decoration: BoxDecoration(
+                          color: Color(0x190072c5),
+                          borderRadius: BorderRadius.circular(21 * fem),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '3',
+                            textAlign: TextAlign.center,
+                            style: safeGoogleFont(
+                              'Inter',
+                              fontSize: 19.6000003815 * ffem,
+                              fontWeight: FontWeight.w400,
+                              height: 1.2125 * ffem / fem,
+                              color: Color(0xff0072c5),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      Container(
+                        // loremipsumdolorsitametconsecte (254:269)
+                        constraints: BoxConstraints(
+                          maxWidth: 272 * fem,
+                        ),
+                        child: Text(
+                          'Choississez votre gynecologue',
+                          style: safeGoogleFont(
+                            'Roboto',
+                            fontSize: 15 * ffem,
+                            fontWeight: FontWeight.w400,
+                            height: 1.6 * ffem / fem,
+                            color: Color(0xff5c5a5a),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Container(
@@ -212,10 +239,10 @@ class HelpInfo extends StatelessWidget {
                       children: [
                         TextSpan(
                           text:
-                              'Pour plus d’info rendez-vous sur notre site web: ',
+                              "Pour plus d'info rendez-vous sur notre site web: ",
                         ),
                         TextSpan(
-                          text: 'https://benda.com',
+                          text: 'https://bendacm.net',
                           style: safeGoogleFont(
                             'Roboto',
                             fontSize: 16 * ffem,

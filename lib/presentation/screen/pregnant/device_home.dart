@@ -13,34 +13,13 @@ class _DeviceHomeState extends State<DeviceHome> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20),
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
           children: [
             DeviceCard(
-                status: "Connecter",
+                status: "Connecté",
                 datetime: "15-09-2023 21:43",
                 deviceID: "1234569"),
-            SizedBox(
-              height: 20,
-            ),
-            DeviceCard(
-                status: "Connecter",
-                datetime: "15-09-2023 21:43",
-                deviceID: "1234569"),
-            SizedBox(
-              height: 20,
-            ),
-            DeviceCard(
-                status: "Connecter",
-                datetime: "15-09-2023 21:43",
-                deviceID: "1234569"),
-            SizedBox(
-              height: 20,
-            ),
-            DeviceCard(
-                status: "Connecter",
-                datetime: "15-09-2023 21:43",
-                deviceID: "1234569")
           ],
         ),
       ),

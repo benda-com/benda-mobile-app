@@ -353,6 +353,12 @@ class _HomeGenycoState extends State<HomeGenyco> {
                           itemBuilder: (context, index) => PregnantCard(
                               fem: fem,
                               ffem: ffem,
+                              id: display_list[index].id,
+                              email: display_list[index].email,
+                              dateOfBirth: display_list[index].dateOfBirth,
+                              phoneNumber: display_list[index].phoneNumber,
+                              pregnantWomanPrenancyWeek:
+                                  display_list[index].pregnantWomanPrenancyWeek,
                               name:
                                   "${display_list[index].firstName} ${display_list[index].lastName}",
                               age: DateTime.now().year -
@@ -361,9 +367,6 @@ class _HomeGenycoState extends State<HomeGenyco> {
                                       .toString()
                                       .split(" ")[0]
                                       .split("-")[0]),
-                              week: display_list[index]
-                                  ?.pregnantWomanPrenancyWeek
-                                  .toString(),
                               womenimage: "",
                               colorstatus: Color(0xff08d635),
                               status: "Normal"

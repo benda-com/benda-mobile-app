@@ -34,4 +34,22 @@ class WrightParametersCubit extends Cubit<WrightParametersState> {
     }
     return responseModel;
   }
+
+  Future<ResponseModel> getParameters(String? email) async {
+    emit(WrightParametersLoading());
+    Response response = await wrightParamsRepo.singleWrightParameters(email);
+    ResponseModel responseModel;
+    if (response.statusCode == 200) {
+      emit(WrightParametersCompleted(
+          WrightParametersResponse.fromJson(response.data[0])));
+      responseModel = ResponseModel(
+          isSuccess: true, message: "get wright parameters completed!");
+    } else {
+      emit(WrightParametersInitial());
+      debugPrint(response.statusMessage!);
+      responseModel =
+          ResponseModel(isSuccess: false, message: response.statusMessage!);
+    }
+    return responseModel;
+  }
 }

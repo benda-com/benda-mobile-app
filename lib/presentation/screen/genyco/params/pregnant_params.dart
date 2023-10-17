@@ -1,20 +1,27 @@
+import 'package:benda/logic/risk/risk_bloc.dart';
 import 'package:benda/presentation/widgets/graph_proteinerie.dart';
 import 'package:benda/presentation/widgets/parameter_card.dart';
 import 'package:benda/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:benda/presentation/widgets/filter_parameter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PregnantParams extends StatefulWidget {
   const PregnantParams(
-      {super.key, required this.name, required this.age, required this.week});
+      {super.key,
+      required this.name,
+      required this.age,
+      required this.pregnantWomanPrenancyWeek});
 
   final String name;
   final int age;
-  final String? week;
+  final int? pregnantWomanPrenancyWeek;
 
   @override
-  State<PregnantParams> createState() =>
-      _PregnantParamsState(age: age, name: name, week: week);
+  State<PregnantParams> createState() => _PregnantParamsState(
+      age: age,
+      name: name,
+      pregnantWomanPrenancyWeek: pregnantWomanPrenancyWeek);
 }
 
 class _PregnantParamsState extends State<PregnantParams> {
@@ -22,12 +29,12 @@ class _PregnantParamsState extends State<PregnantParams> {
   int selectedIndex = 0;
   final String name;
   final int age;
-  final String? week;
+  final int? pregnantWomanPrenancyWeek;
 
   _PregnantParamsState({
     required this.name,
     required this.age,
-    required this.week,
+    required this.pregnantWomanPrenancyWeek,
   });
   List<String> labels = ["Proteine", "TA", "Freq.Card", "Temp"];
   List<String> compLabels = [
@@ -48,6 +55,16 @@ class _PregnantParamsState extends State<PregnantParams> {
     double baseWidth = 428;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
+    final riskBloc = BlocProvider.of<RiskBloc>(context).state;
+
+    var delivrance;
+    var conclusion;
+
+    if (riskBloc is RiskCompleted) {
+      delivrance = riskBloc.riskResponse?.risk;
+      conclusion = riskBloc.riskResponse?.conclusion;
+    }
+
     return Container(
       width: double.infinity,
       child: Container(
@@ -104,10 +121,10 @@ class _PregnantParamsState extends State<PregnantParams> {
                               ],
                             ),
                           ),
-                          if (week != "null")
+                          if (pregnantWomanPrenancyWeek != "null")
                             Text(
                               // semainesGcF (186:505)
-                              '$week semaines',
+                              '$pregnantWomanPrenancyWeek semaines',
                               style: safeGoogleFont(
                                 'Roboto',
                                 fontSize: 16 * ffem,
@@ -340,7 +357,7 @@ class _PregnantParamsState extends State<PregnantParams> {
                                 // pathologiesc3 (299:627)
 
                                 child: Text(
-                                  'Pathologie',
+                                  'Estimation de delivrance',
                                   textAlign: TextAlign.center,
                                   style: safeGoogleFont(
                                     'Inter',
@@ -355,7 +372,7 @@ class _PregnantParamsState extends State<PregnantParams> {
                                 // prclampsieQkP (299:633)
 
                                 child: Text(
-                                  'Prééclampsie',
+                                  '${delivrance?.round().toString()}',
                                   style: safeGoogleFont(
                                     'Inter',
                                     fontSize: 14 * ffem,
@@ -372,7 +389,7 @@ class _PregnantParamsState extends State<PregnantParams> {
                             children: [
                               Text(
                                 // probabilitC8X (299:628)
-                                'Probabilité',
+                                'Conclusion',
                                 style: safeGoogleFont(
                                   'Inter',
                                   fontSize: 14 * ffem,
@@ -383,7 +400,7 @@ class _PregnantParamsState extends State<PregnantParams> {
                               ),
                               Text(
                                 // vTq (299:634)
-                                '75%',
+                                '$conclusion',
                                 style: safeGoogleFont(
                                   'Inter',
                                   fontSize: 14 * ffem,

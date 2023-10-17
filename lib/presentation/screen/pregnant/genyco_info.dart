@@ -1,24 +1,31 @@
+import 'package:benda/logic/user/user_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:benda/utils.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GenycoInfo extends StatelessWidget {
-  final String gynecoFirstName;
-  final String gynecoLastName;
-  final String gynecoMatricule;
-  final String gynecoHospital;
-
-  const GenycoInfo(
-      {super.key,
-      required this.gynecoFirstName,
-      required this.gynecoLastName,
-      required this.gynecoMatricule,
-      required this.gynecoHospital});
+  const GenycoInfo({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     double baseWidth = 428;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
+
+    String? gynecoFirstName = "";
+    String? gynecoLastName = "";
+    String? gynecoMatricule = "";
+    String? gynecoHospital = "";
+
+    final userGynecoBloc = BlocProvider.of<UserBloc>(context).state;
+    if (userGynecoBloc is UserCompleted) {
+      gynecoFirstName = userGynecoBloc.userResponse?.firstName ?? "";
+      gynecoLastName = userGynecoBloc.userResponse?.lastName ?? "";
+      gynecoMatricule = userGynecoBloc.userResponse?.licenseNumber ?? "";
+      gynecoHospital = userGynecoBloc.userResponse?.hospital ?? "";
+    }
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(

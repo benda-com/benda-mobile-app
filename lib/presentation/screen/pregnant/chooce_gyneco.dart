@@ -36,11 +36,6 @@ class _ChooseGynecoState extends State<ChooseGyneco> {
     final authCubit = BlocProvider.of<AuthCubit>(context);
     var pregnant = authCubit.state as LoginCompleted;
 
-    String gynecoFirstName = "";
-    String gynecoLastName = "";
-    String gynecoMatricule = "";
-    String gynecoHospital = " ";
-
     return Scaffold(
       body: BlocProvider(
         create: (context) =>
@@ -119,11 +114,7 @@ class _ChooseGynecoState extends State<ChooseGyneco> {
                         if (state is PregToGynecoCompleted) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) {
-                            return HomeLayout(
-                                gynecoFirstName: gynecoFirstName,
-                                gynecoHospital: gynecoHospital,
-                                gynecoLastName: gynecoLastName,
-                                gynecoMatricule: gynecoMatricule);
+                            return HomeLayout();
                           }));
                         }
                       },
@@ -147,16 +138,6 @@ class _ChooseGynecoState extends State<ChooseGyneco> {
                               itemCount: display_list.length,
                               itemBuilder: (context, index) => InkWell(
                                     onTap: () {
-                                      gynecoFirstName =
-                                          display_list[index].firstName;
-                                      gynecoLastName =
-                                          display_list[index].lastName;
-                                      gynecoHospital =
-                                          display_list[index].hospital;
-                                      gynecoMatricule =
-                                          display_list[index].licenseNumber ??
-                                              "";
-
                                       BlocProvider.of<PregToGynecoBloc>(context)
                                           .add(PregToGynecoLoadEvent(
                                               pregnant.loginResponse?.id,

@@ -10,8 +10,12 @@ class PregnantCard extends StatelessWidget {
       required this.name,
       required this.colorstatus,
       required this.age,
-      required this.week,
+      required this.pregnantWomanPrenancyWeek,
       required this.womenimage,
+      required this.dateOfBirth,
+      required this.phoneNumber,
+      required this.email,
+      required this.id,
       required this.status});
 
   final double fem;
@@ -19,9 +23,13 @@ class PregnantCard extends StatelessWidget {
   final String name;
   final Color colorstatus;
   final int age;
-  final String? week;
+  final int pregnantWomanPrenancyWeek;
   final String womenimage;
   final String status;
+  final int? id;
+  final String phoneNumber;
+  final String email;
+  final DateTime dateOfBirth;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +46,11 @@ class PregnantCard extends StatelessWidget {
               return PregnantDetails(
                 age: age,
                 name: name,
-                week: week,
+                pregnantWomanPrenancyWeek: pregnantWomanPrenancyWeek,
+                phoneNumber: phoneNumber,
+                email: email,
+                dateOfBirth: dateOfBirth,
+                id: id,
               );
             }),
           );
@@ -68,9 +80,9 @@ class PregnantCard extends StatelessWidget {
               SizedBox(
                 height: 2 * fem,
               ),
-              if (week != "null")
+              if (pregnantWomanPrenancyWeek != "null")
                 Text(
-                  '${week} semaines',
+                  '${pregnantWomanPrenancyWeek} semaines',
                   style: safeGoogleFont(
                     'Inter',
                     fontSize: 13 * ffem,

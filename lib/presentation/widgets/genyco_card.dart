@@ -29,7 +29,8 @@ class GenycoCard extends StatelessWidget {
         contentPadding: EdgeInsets.all(10),
         tileColor: Colors.white,
         leading: CircleAvatar(
-          foregroundImage: AssetImage("images/${genycoimage}"),
+          foregroundImage: AssetImage("images/uppericons.png"),
+          backgroundColor: Color.fromARGB(255, 169, 169, 169),
         ),
         title: Column(
           mainAxisAlignment: MainAxisAlignment.start,
