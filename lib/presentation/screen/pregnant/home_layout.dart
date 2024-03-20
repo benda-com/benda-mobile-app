@@ -17,10 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeLayout extends StatefulWidget {
-  const HomeLayout({
-    super.key,
-  });
-
+  const HomeLayout({super.key, this.proteine = "250"});
+  final String proteine;
   @override
   State<HomeLayout> createState() => _HomeLayoutState();
 }
@@ -51,7 +49,7 @@ class _HomeLayoutState extends State<HomeLayout> {
 
     List<Widget> _widgetOptions = <Widget>[
       const GenycoInfo(),
-      const HomePregnant(),
+      HomePregnant(proteine: widget.proteine),
       const DeviceHome(),
     ];
 
@@ -188,7 +186,6 @@ class _HomeLayoutState extends State<HomeLayout> {
             }
           },
           child: BlocListener<UserBloc, UserState>(listener: (context, state) {
-            print(state);
             if (state is UserCompleted) {
               wrightBloc
                   .add(WrightParametersLoadEvent(user.loginResponse?.email));

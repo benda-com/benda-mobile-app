@@ -2,13 +2,19 @@ import "package:syncfusion_flutter_charts/charts.dart";
 import 'package:flutter/material.dart';
 import "package:intl/intl.dart";
 import "dart:async";
-import "dart:math" as math;
 
 class GraphProteinerieWidget extends StatefulWidget {
-  const GraphProteinerieWidget({super.key, required this.graphName, required this.selectedIndex});
+  const GraphProteinerieWidget(
+      {super.key,
+      required this.graphName,
+      required this.selectedIndex,
+      required this.formattedDatetime,
+      required this.freqCard});
 
   final String graphName;
   final int selectedIndex;
+  final String formattedDatetime;
+  final double? freqCard;
   @override
   State<GraphProteinerieWidget> createState() => _GraphProteinerieWidgetState();
 }
@@ -26,7 +32,7 @@ class _GraphProteinerieWidgetState extends State<GraphProteinerieWidget> {
   void initState() {
     _chartData = getChartData();
     _tooltipBehavior = TooltipBehavior(enable: true);
-    timer = Timer.periodic(const Duration(seconds: 1), updateDataSource);
+    timer = Timer.periodic(const Duration(seconds: 5), updateDataSource);
     _zoomPanBehavior = ZoomPanBehavior(
       enablePinching: true,
       enableDoubleTapZooming: true,
@@ -77,245 +83,23 @@ class _GraphProteinerieWidgetState extends State<GraphProteinerieWidget> {
 
   void updateDataSource(Timer timer) {
     DateTime dateTime;
-    if (timeM < 60) {
-      dateTime = DateTime(2023, 09, 22, timeH, timeM++, 10);
-      if(widget.selectedIndex == 0) {
-        _chartData.add(
-            ParamData(peroid: dateTime, value: (math.Random().nextInt(60) + 40)));
-      } else if(widget.selectedIndex == 1){
-        _chartData.add(
-            ParamData(peroid: dateTime, value: (math.Random().nextInt(80) + 40)));
-      } else if(widget.selectedIndex == 2){
-        _chartData.add(
-            ParamData(peroid: dateTime, value: (math.Random().nextInt(100) + 40)));
-      } else {
-        _chartData.add(
-            ParamData(peroid: dateTime, value: (math.Random().nextInt(120) + 40)));
-      }
-      _chartData.removeAt(0);
-      _chartSeriesController.updateDataSource(
-          addedDataIndex: _chartData.length - 1, removedDataIndex: 0);
-      setState(() {
+    String formattedDatetime = widget.formattedDatetime;
+    var yearF = int.parse(formattedDatetime.split(" ")[0].split("-")[2]);
+    var monthF = int.parse(formattedDatetime.split(" ")[0].split("-")[1]);
+    var dayF = int.parse(formattedDatetime.split(" ")[0].split("-")[0]);
+    var hourF = int.parse(formattedDatetime.split(" ")[1].split(":")[0]);
+    var minuteF = int.parse(formattedDatetime.split(" ")[1].split(":")[1]);
+    var secondF = int.parse(formattedDatetime.split(" ")[1].split(":")[2]);
 
-      });
-    } else {
-      dateTime = DateTime(2023, 09, 22, timeH++, timeM, 10);
-      _chartData.add(
-          ParamData(peroid: dateTime, value: (math.Random().nextInt(60) + 30)));
-      _chartData.removeAt(0);
-      _chartSeriesController.updateDataSource(
-          addedDataIndex: _chartData.length - 1, removedDataIndex: 0);
-      timeM = 0;
-    }
+    dateTime = DateTime(yearF, monthF, dayF, hourF, minuteF, secondF);
+    _chartData.add(ParamData(peroid: dateTime, value: widget.freqCard));
+
+    _chartSeriesController.updateDataSource(
+        addedDataIndex: _chartData.length - 1, removedDataIndex: 0);
   }
 
   List<ParamData> getChartData() {
-    return <ParamData>[
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 21, 00, 10),
-        value: 98.97,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 20, 30, 10),
-        value: 98.41,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 20, 20, 10),
-        value: 101.52,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 20, 10, 10),
-        value: 96.47,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 20, 00, 10),
-        value: 93.13,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 19, 50, 10),
-        value: 91.02,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 19, 40, 10),
-        value: 96.31,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 19, 30, 10),
-        value: 99.86,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 19, 20, 10),
-        value: 102.39,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 19, 10, 10),
-        value: 101.91,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 19, 00, 10),
-        value: 105.93,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 18, 40, 10),
-        value: 106,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 18, 30, 10),
-        value: 110.42,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 18, 20, 10),
-        value: 108.97,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 18, 10, 10),
-        value: 108.89,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 18, 10, 10),
-        value: 105,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 18, 00, 10),
-        value: 93.965,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 17, 50, 10),
-        value: 93,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 17, 40, 10),
-        value: 92.39,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 17, 30, 10),
-        value: 95.87,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 17, 20, 10),
-        value: 99.6,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 17, 10, 10),
-        value: 97.99,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 17, 00, 10),
-        value: 98.69,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 16, 50, 10),
-        value: 96,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 16, 40, 10),
-        value: 93,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 16, 30, 10),
-        value: 95.39,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 16, 20, 10),
-        value: 96.75,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 16, 10, 10),
-        value: 98.7,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 16, 00, 10),
-        value: 98.25,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 16, 00, 10),
-        value: 104.41,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 15, 50, 10),
-        value: 107.52,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 15, 40, 10),
-        value: 108.14,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 15, 30, 10),
-        value: 108.86,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 15, 20, 10),
-        value: 106.62,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 15, 10, 10),
-        value: 107.9,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 15, 00, 10),
-        value: 102.65,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 14, 50, 10),
-        value: 115.19,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 14, 40, 10),
-        value: 111.64,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 14, 30, 10),
-        value: 112.71,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 14, 20, 10),
-        value: 115.02,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 14, 10, 10),
-        value: 117.33,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 14, 00, 10),
-        value: 117.1,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 13, 50, 10),
-        value: 113.65,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 13, 40, 10),
-        value: 110.08,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 13, 30, 10),
-        value: 107.71,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 13, 20, 10),
-        value: 114.12,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 13, 10, 10),
-        value: 111.43,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 13, 0, 10),
-        value: 110,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 12, 50, 10),
-        value: 113.29,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 12, 40, 10),
-        value: 115.8,
-      ),
-      ParamData(
-        peroid: DateTime(2023, 09, 22, 12, 30, 10),
-        value: 116.52,
-      ),
-    ];
+    return <ParamData>[];
   }
 }
 

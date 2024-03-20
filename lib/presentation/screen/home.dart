@@ -152,9 +152,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       Container(
-                        // vectorVG3 (115:57)
-                        // margin: EdgeInsets.fromLTRB(
-                        //     0 * fem, 0.99 * fem, 0 * fem, 0 * fem),
                         width: 16 * fem,
                         height: 9.99 * fem,
                         child: Image.asset(

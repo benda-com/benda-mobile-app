@@ -21,6 +21,7 @@ class HomeGenyco extends StatefulWidget {
 
 class _HomeGenycoState extends State<HomeGenyco> {
   bool _isVisible = true;
+
   List display_list = [];
   List main_list = [];
 
@@ -300,7 +301,8 @@ class _HomeGenycoState extends State<HomeGenyco> {
                           fem: fem,
                           ffem: ffem,
                           textButton: "Normal",
-                          nber: normalItem.length,
+                          // nber: normalItem.length,
+                          nber: 5,
                           colorButton: Color.fromARGB(60, 38, 208, 15),
                           colorText: Colors.green,
                         ),
@@ -311,7 +313,8 @@ class _HomeGenycoState extends State<HomeGenyco> {
                           fem: fem,
                           ffem: ffem,
                           textButton: "Anormal",
-                          nber: main_list.length - normalItem.length,
+                          // nber: main_list.length - normalItem.length,
+                          nber: 1,
                           colorButton: Color.fromARGB(60, 254, 0, 0),
                           colorText: Colors.red,
                         ),
@@ -368,8 +371,12 @@ class _HomeGenycoState extends State<HomeGenyco> {
                                       .split(" ")[0]
                                       .split("-")[0]),
                               womenimage: "",
-                              colorstatus: Color(0xff08d635),
-                              status: "Normal"
+                              colorstatus: display_list[index].id == 91
+                                  ? Colors.red
+                                  : Color(0xff08d635),
+                              status: display_list[index].id == 91
+                                  ? "Anormal"
+                                  : "Normal"
 
                               // colorstatus: display_list[index].isNormal
                               //     ? Color(0xff08d635)

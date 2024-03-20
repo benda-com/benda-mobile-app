@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:benda/logic/auth/auth_cubit.dart';
 import 'package:benda/logic/risk/risk_bloc.dart';
+import 'package:benda/presentation/screen/pregnant/brandlet_brand.dart';
 import 'package:benda/presentation/screen/pregnant/notification.dart';
 import 'package:benda/presentation/widgets/notification_card.dart';
 import 'package:benda/presentation/widgets/parameter_card.dart';
@@ -9,12 +10,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:benda/utils.dart';
 import 'package:timezone/standalone.dart' as tz;
+import 'dart:math';
 
 final detroit = tz.getLocation('Africa/Lagos');
 
 class HomePregnant extends StatefulWidget {
-  const HomePregnant({super.key});
+  const HomePregnant({super.key, this.proteine = "250"});
 
+  final String proteine;
   @override
   State<HomePregnant> createState() => _HomePregnantState();
 }
@@ -25,7 +28,23 @@ class _HomePregnantState extends State<HomePregnant> {
       .format(tz.TZDateTime.from(DateTime.now(), detroit));
   String hour =
       DateFormat('a').format(tz.TZDateTime.from(DateTime.now(), detroit));
+
   late Timer _timer;
+  late Timer timerParams;
+  double? satuOxy = 90;
+  double? proteine = 250;
+  double? taDiastolique = 80;
+  double? taSystolique = 110;
+  double? freqCard = 80;
+  double? temp = 37.2;
+
+  bool normalTemp = true;
+  bool normalSatOxy = true;
+  bool normalTa = true;
+  bool normalFreqCard = true;
+  bool normalProteine = true;
+  bool normalParams = true;
+
   bool _isVisible = false;
 
   @override
@@ -33,21 +52,70 @@ class _HomePregnantState extends State<HomePregnant> {
     super.initState();
     _timer =
         Timer.periodic(const Duration(milliseconds: 500), (timer) => _update());
+    timerParams = Timer.periodic(const Duration(seconds: 3), updateDataSource);
   }
 
   @override
   void dispose() {
     super.dispose();
     _timer.cancel();
+    timerParams.cancel();
   }
 
   void _update() {
     setState(() {
-      formattedTime = DateFormat('dd-MM-yyyy kk:mm')
+      formattedTime = DateFormat('dd-MM-yyyy kk:mm:ss')
           .format(tz.TZDateTime.from(DateTime.now(), detroit));
       hour =
           DateFormat('a').format(tz.TZDateTime.from(DateTime.now(), detroit));
     });
+  }
+
+  String formatHour(String dateTime) {
+    return "${dateTime.split(" ")[1]}";
+  }
+
+  void updateDataSource(Timer timer) {
+    Random random = new Random();
+    setState(() {
+      satuOxy = random.nextDouble() * 10 + 90;
+      temp = random.nextDouble() * 0.5 + 37;
+      freqCard = random.nextDouble() * 20 + 70;
+      taDiastolique = random.nextDouble() * 40 + 70;
+      taSystolique = random.nextDouble() * 40 + 120;
+      proteine = double.parse(widget.proteine);
+    });
+    if (temp! < 37 || temp! > 37.5) {
+      setState(() {
+        normalTemp = false;
+      });
+    }
+    if (satuOxy! < 90) {
+      setState(() {
+        normalSatOxy = false;
+      });
+    }
+    if (freqCard! < 70 || freqCard! > 120) {
+      setState(() {
+        normalFreqCard = false;
+      });
+    }
+    if (taDiastolique! >= 90 || taSystolique! >= 140) {
+      setState(() {
+        normalTa = false;
+      });
+    }
+    if (proteine! >= 300) {
+      setState(() {
+        normalProteine = false;
+      });
+    }
+
+    normalParams = normalFreqCard &&
+        normalProteine &&
+        normalSatOxy &&
+        normalTa &&
+        normalTemp;
   }
 
   void showPrediction() {
@@ -65,11 +133,9 @@ class _HomePregnantState extends State<HomePregnant> {
     final riskBloc = BlocProvider.of<RiskBloc>(context).state;
 
     String? conclusion = "";
-    String? delivrance = "";
 
     if (riskBloc is RiskCompleted) {
       conclusion = riskBloc.riskResponse?.conclusion;
-      delivrance = riskBloc.riskResponse?.risk?.round().toString();
     }
 
     var authState;
@@ -196,19 +262,19 @@ class _HomePregnantState extends State<HomePregnant> {
                   fem: fem,
                   ffem: ffem,
                   paramName: "Protéinurie",
-                  paramTime: "12h00",
+                  paramTime: "${formatHour(formattedTime)}",
                   paramUnit: "mg",
-                  status: "Normal",
-                  paramValue: 12,
+                  status: normalProteine == true ? "Normal" : "Anormal",
+                  paramValue: proteine,
                 ),
                 ParameterCardWidget(
                   fem: fem,
                   ffem: ffem,
                   paramName: "Temperature",
-                  paramTime: "12h00",
+                  paramTime: "${formatHour(formattedTime)}",
                   paramUnit: "°C",
-                  status: "Normal",
-                  paramValue: 37,
+                  status: normalTemp == true ? "Normal" : "Anormal",
+                  paramValue: temp,
                 ),
               ],
             ),
@@ -220,19 +286,20 @@ class _HomePregnantState extends State<HomePregnant> {
                   fem: fem,
                   ffem: ffem,
                   paramName: "Freq. Card",
-                  paramTime: "12h00",
+                  paramTime: "${formatHour(formattedTime)}",
                   paramUnit: "bpm",
-                  status: "Normal",
-                  paramValue: 120,
+                  status: normalFreqCard == true ? "Normal" : "Anormal",
+                  paramValue: freqCard,
                 ),
                 ParameterCardWidget(
                   fem: fem,
                   ffem: ffem,
                   paramName: "TA",
-                  paramTime: "12h00",
+                  paramTime: "${formatHour(formattedTime)}",
                   paramUnit: "mmHg",
-                  status: "Normal",
-                  paramValue: 120,
+                  status: normalTa == true ? "Normal" : "Anormal",
+                  paramValue: taSystolique,
+                  paramValue2: taDiastolique,
                 ),
               ],
             ),
@@ -244,22 +311,23 @@ class _HomePregnantState extends State<HomePregnant> {
                   fem: fem,
                   ffem: ffem,
                   paramName: "Satu. oxyg",
-                  paramTime: "12h00",
+                  paramTime: "${formatHour(formattedTime)}",
                   paramUnit: "%",
-                  status: "Normal",
-                  paramValue: 100,
+                  status: normalSatOxy == true ? "Normal" : "Anormal",
+                  paramValue: satuOxy,
                 ),
                 Container(
                   width: 190,
                   height: 80,
                   child: Center(
                     child: Text(
-                      "Aucun danger",
+                      normalParams == true ? "Aucun danger" : "Danger",
                       style: safeGoogleFont('Inter',
                           fontSize: 18 * ffem,
                           fontWeight: FontWeight.w500,
                           height: 1.2125 * ffem / fem,
-                          color: Colors.green),
+                          color:
+                              normalParams == true ? Colors.green : Colors.red),
                     ),
                   ),
                 ),
@@ -290,10 +358,10 @@ class _HomePregnantState extends State<HomePregnant> {
                       margin: EdgeInsets.fromLTRB(
                           0 * fem, 0 * fem, 189.52 * fem, 0 * fem),
                       child: Text(
-                        'Suggestion',
+                        'Risque de Prééclampsie',
                         style: safeGoogleFont(
                           'Roboto',
-                          fontSize: 20.6326522827 * ffem,
+                          fontSize: 15 * ffem,
                           fontWeight: FontWeight.w400,
                           height: 1.333333395 * ffem / fem,
                           color: Color(0xff5c5a5a),
@@ -324,6 +392,9 @@ class _HomePregnantState extends State<HomePregnant> {
                 ),
               ),
             ),
+            SizedBox(
+              height: 20,
+            ),
             if (_isVisible)
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 20),
@@ -333,36 +404,6 @@ class _HomePregnantState extends State<HomePregnant> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Text(
-                            'Estimation de delivrance',
-                            textAlign: TextAlign.center,
-                            style: safeGoogleFont(
-                              'Inter',
-                              fontSize: 14 * ffem,
-                              fontWeight: FontWeight.w500,
-                              height: 1.2125 * ffem / fem,
-                              color: Color(0xff5c5a5a),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          child: Text(
-                            '$delivrance',
-                            style: safeGoogleFont(
-                              'Inter',
-                              fontSize: 14 * ffem,
-                              fontWeight: FontWeight.w300,
-                              height: 1.2125 * ffem / fem,
-                              color: Color(0xff5c5a5a),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -392,6 +433,69 @@ class _HomePregnantState extends State<HomePregnant> {
                   ],
                 ),
               ),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (BuildContext context) {
+                    return BrandletBrand();
+                  }),
+                );
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                height: 60 * fem,
+                decoration: BoxDecoration(
+                  color: Color(0xffffffff),
+                  borderRadius: BorderRadius.circular(6.8775510788 * fem),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color(0x14000000),
+                      offset: Offset(0 * fem, 4 * fem),
+                      blurRadius: 17 * fem,
+                    ),
+                  ],
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.fromLTRB(
+                          0 * fem, 0 * fem, 189.52 * fem, 0 * fem),
+                      child: Text(
+                        'Test de proteinerie',
+                        style: safeGoogleFont(
+                          'Roboto',
+                          fontSize: 15 * ffem,
+                          fontWeight: FontWeight.w400,
+                          height: 1.333333395 * ffem / fem,
+                          color: Color(0xff5c5a5a),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(
+                          0 * fem, 3.25 * fem, 0 * fem, 3.25 * fem),
+                      height: double.infinity,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 30 * fem,
+                            height: 30 * fem,
+                            child: Image.asset(
+                              width: 120,
+                              'images/protein.png',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 25),
               child: Row(
@@ -442,7 +546,7 @@ class _HomePregnantState extends State<HomePregnant> {
                       ffem: ffem,
                       name: 'Conseille santé',
                       genycoimage: "ellipse-15-bg.png",
-                      hospitalName: "Evitez de dormir sans caleçon"),
+                      hospitalName: "Evitez de fumer ou de boire de l'alcool"),
                 ],
               ),
             )

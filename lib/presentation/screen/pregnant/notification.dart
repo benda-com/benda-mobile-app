@@ -64,7 +64,8 @@ class _NotificationPregnantState extends State<NotificationPregnant> {
                         ffem: ffem,
                         name: 'Conseille santé',
                         genycoimage: "ellipse-15-bg.png",
-                        hospitalName: "Evitez de dormir sans caleçon"),
+                        hospitalName:
+                            "Evitez de fumer ou de boire de l'alcool"),
                   ],
                 ),
               )

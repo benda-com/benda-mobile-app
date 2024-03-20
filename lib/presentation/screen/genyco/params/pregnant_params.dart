@@ -5,6 +5,13 @@ import 'package:benda/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:benda/presentation/widgets/filter_parameter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import "dart:async";
+import 'dart:math';
+import 'package:timezone/standalone.dart' as tz;
+import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+final detroit = tz.getLocation('Africa/Lagos');
 
 class PregnantParams extends StatefulWidget {
   const PregnantParams(
@@ -27,22 +34,117 @@ class PregnantParams extends StatefulWidget {
 class _PregnantParamsState extends State<PregnantParams> {
   bool _isVisible = false;
   int selectedIndex = 0;
+
   final String name;
   final int age;
   final int? pregnantWomanPrenancyWeek;
+
+  late Timer timerParams;
+  final localizedDt = tz.TZDateTime.from(DateTime.now(), detroit);
+  String formattedTime = DateFormat('dd-MM-yyyy kk:mm:ss')
+      .format(tz.TZDateTime.from(DateTime.now(), detroit));
+  String hour =
+      DateFormat('a').format(tz.TZDateTime.from(DateTime.now(), detroit));
+
+  Timer? timer;
+  double? satuOxy = 90;
+  double? proteine = 250;
+  double? taDiastolique = 80;
+  double? taSystolique = 110;
+  double? freqCard = 80;
+  double? temp = 37.2;
+
+  bool normalTemp = true;
+  bool normalSatOxy = true;
+  bool normalTa = true;
+  bool normalFreqCard = true;
+  bool normalProteine = true;
+  bool normalParams = true;
+
+  List<String> labels = ["Freq.Card", "Proteine", "TA", "Temp"];
+  List<String> compLabels = [
+    "Frequence Cardiaque",
+    "Protéinurie",
+    "Tension Arterielle",
+    "Temperature",
+  ];
 
   _PregnantParamsState({
     required this.name,
     required this.age,
     required this.pregnantWomanPrenancyWeek,
   });
-  List<String> labels = ["Proteine", "TA", "Freq.Card", "Temp"];
-  List<String> compLabels = [
-    "Protéinurie",
-    "Tension Arterielle",
-    "Frequence Cardiaque",
-    "Temperature",
-  ];
+
+  @override
+  void initState() {
+    timerParams = Timer.periodic(const Duration(seconds: 3), updateDataSource);
+    super.initState();
+    timer =
+        Timer.periodic(const Duration(milliseconds: 500), (timer) => _update());
+  }
+
+  void _update() {
+    setState(() {
+      formattedTime = DateFormat('dd-MM-yyyy kk:mm:ss')
+          .format(tz.TZDateTime.from(DateTime.now(), detroit));
+      hour =
+          DateFormat('a').format(tz.TZDateTime.from(DateTime.now(), detroit));
+    });
+  }
+
+  String formatHour(String dateTime) {
+    return "${dateTime.split(" ")[1]}";
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer!.cancel();
+    timerParams.cancel();
+  }
+
+  void updateDataSource(Timer timer) {
+    Random random = new Random();
+    setState(() {
+      satuOxy = random.nextDouble() * 10 + 90;
+      temp = random.nextDouble() * 0.5 + 37;
+      freqCard = random.nextDouble() * 20 + 70;
+      taDiastolique = random.nextDouble() * 40 + 70;
+      taSystolique = random.nextDouble() * 40 + 120;
+      proteine = 300;
+    });
+    if (temp! < 37 || temp! > 37.5) {
+      setState(() {
+        normalTemp = false;
+      });
+    }
+    if (satuOxy! < 90) {
+      setState(() {
+        normalSatOxy = false;
+      });
+    }
+    if (freqCard! < 70 || freqCard! > 120) {
+      setState(() {
+        normalFreqCard = false;
+      });
+    }
+    if (taDiastolique! >= 90 || taSystolique! >= 140) {
+      setState(() {
+        normalTa = false;
+      });
+    }
+    if (proteine! >= 300) {
+      setState(() {
+        normalProteine = false;
+      });
+    }
+
+    normalParams = normalFreqCard &&
+        normalProteine &&
+        normalSatOxy &&
+        normalTa &&
+        normalTemp;
+  }
 
   void showPrediction() {
     setState(() {
@@ -57,11 +159,9 @@ class _PregnantParamsState extends State<PregnantParams> {
     double ffem = fem * 0.97;
     final riskBloc = BlocProvider.of<RiskBloc>(context).state;
 
-    var delivrance;
     var conclusion;
 
     if (riskBloc is RiskCompleted) {
-      delivrance = riskBloc.riskResponse?.risk;
       conclusion = riskBloc.riskResponse?.conclusion;
     }
 
@@ -165,6 +265,8 @@ class _PregnantParamsState extends State<PregnantParams> {
                       child: GraphProteinerieWidget(
                     graphName: compLabels[selectedIndex],
                     selectedIndex: selectedIndex,
+                    formattedDatetime: formattedTime,
+                    freqCard: freqCard,
                   )),
                   SizedBox(
                     height: 20,
@@ -177,19 +279,19 @@ class _PregnantParamsState extends State<PregnantParams> {
                         fem: fem,
                         ffem: ffem,
                         paramName: "Protéinurie",
-                        paramTime: "12h00",
+                        paramTime: "${formatHour(formattedTime)}",
                         paramUnit: "mg",
-                        status: "Normal",
-                        paramValue: 12,
+                        status: normalProteine == true ? "Normal" : "Anormal",
+                        paramValue: proteine,
                       ),
                       ParameterCardWidget(
                         fem: fem,
                         ffem: ffem,
                         paramName: "Temperature",
-                        paramTime: "12h00",
+                        paramTime: "${formatHour(formattedTime)}",
                         paramUnit: "°C",
-                        status: "Normal",
-                        paramValue: 37,
+                        status: normalTemp == true ? "Normal" : "Anormal",
+                        paramValue: temp,
                       ),
                     ],
                   ),
@@ -201,19 +303,20 @@ class _PregnantParamsState extends State<PregnantParams> {
                         fem: fem,
                         ffem: ffem,
                         paramName: "Freq. Card",
-                        paramTime: "12h00",
+                        paramTime: "${formatHour(formattedTime)}",
                         paramUnit: "bpm",
-                        status: "Normal",
-                        paramValue: 120,
+                        status: normalFreqCard == true ? "Normal" : "Anormal",
+                        paramValue: freqCard,
                       ),
                       ParameterCardWidget(
                         fem: fem,
                         ffem: ffem,
                         paramName: "TA",
-                        paramTime: "12h00",
+                        paramTime: "${formatHour(formattedTime)}",
                         paramUnit: "mmHg",
-                        status: "Normal",
-                        paramValue: 120,
+                        status: normalTa == true ? "Normal" : "Anormal",
+                        paramValue: taSystolique,
+                        paramValue2: taDiastolique,
                       ),
                     ],
                   ),
@@ -225,54 +328,56 @@ class _PregnantParamsState extends State<PregnantParams> {
                         fem: fem,
                         ffem: ffem,
                         paramName: "Satu. Oxy.",
-                        paramTime: "12h00",
+                        paramTime: "${formatHour(formattedTime)}",
                         paramUnit: "%",
-                        status: "Normal",
-                        paramValue: 100,
+                        status: normalSatOxy == true ? "Normal" : "Anormal",
+                        paramValue: satuOxy?.toDouble(),
                       ),
                     ],
                   ),
                   SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    height: 50 * fem,
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    decoration: BoxDecoration(
-                      color: Color(0xff08d635),
-                      borderRadius: BorderRadius.circular(8 * fem),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          // appelermadamefokouokj (163:263)
-                          margin: EdgeInsets.fromLTRB(
-                              0 * fem, 0 * fem, 70 * fem, 0 * fem),
-                          child: Text(
-                            'Appeler madame $name',
-                            textAlign: TextAlign.center,
-                            style: safeGoogleFont(
-                              'Roboto',
-                              fontSize: 14 * ffem,
-                              fontWeight: FontWeight.w400,
-                              height: 1.4285714286 * ffem / fem,
-                              color: Color(0xffffffff),
+                  InkWell(
+                    child: Container(
+                      height: 50 * fem,
+                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                        color: Color(0xff08d635),
+                        borderRadius: BorderRadius.circular(8 * fem),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            // appelermadamefokouokj (163:263)
+                            margin: EdgeInsets.fromLTRB(
+                                0 * fem, 0 * fem, 70 * fem, 0 * fem),
+                            child: Text(
+                              'Appeler madame $name',
+                              textAlign: TextAlign.center,
+                              style: safeGoogleFont(
+                                'Roboto',
+                                fontSize: 14 * ffem,
+                                fontWeight: FontWeight.w400,
+                                height: 1.4285714286 * ffem / fem,
+                                color: Color(0xffffffff),
+                              ),
                             ),
                           ),
-                        ),
-                        Container(
-                          // phoneoutlineW9M (163:265)
-                          width: 18 * fem,
-                          height: 18 * fem,
-                          child: Image.asset(
-                            'images/phoneoutline.png',
+                          Container(
+                            // phoneoutlineW9M (163:265)
                             width: 18 * fem,
                             height: 18 * fem,
+                            child: Image.asset(
+                              'images/phoneoutline.png',
+                              width: 18 * fem,
+                              height: 18 * fem,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -303,10 +408,10 @@ class _PregnantParamsState extends State<PregnantParams> {
                             margin: EdgeInsets.fromLTRB(
                                 0 * fem, 0 * fem, 189.52 * fem, 0 * fem),
                             child: Text(
-                              'Suggestion',
+                              'Risque de Prééclampsie',
                               style: safeGoogleFont(
                                 'Roboto',
-                                fontSize: 20.6326522827 * ffem,
+                                fontSize: 12 * ffem,
                                 fontWeight: FontWeight.w400,
                                 height: 1.333333395 * ffem / fem,
                                 color: Color(0xff5c5a5a),
@@ -350,40 +455,6 @@ class _PregnantParamsState extends State<PregnantParams> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                // pathologiesc3 (299:627)
-
-                                child: Text(
-                                  'Estimation de delivrance',
-                                  textAlign: TextAlign.center,
-                                  style: safeGoogleFont(
-                                    'Inter',
-                                    fontSize: 14 * ffem,
-                                    fontWeight: FontWeight.w500,
-                                    height: 1.2125 * ffem / fem,
-                                    color: Color(0xff5c5a5a),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                // prclampsieQkP (299:633)
-
-                                child: Text(
-                                  '${delivrance?.round().toString()}',
-                                  style: safeGoogleFont(
-                                    'Inter',
-                                    fontSize: 14 * ffem,
-                                    fontWeight: FontWeight.w300,
-                                    height: 1.2125 * ffem / fem,
-                                    color: Color(0xff5c5a5a),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
